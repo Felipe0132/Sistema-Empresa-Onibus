@@ -1,7 +1,7 @@
 import googlemaps
 from datetime import datetime
 
-gmaps = googlemaps.Client(key='AIzaSyC71oRGctIVw9bBgzl8ELKMYj23ZsZkQD8') # Configurando e colocando chave de acesso na  API
+gmaps = googlemaps.Client(key='') # Configurando e colocando chave de acesso na  API
 
 class Linha():
     def __init__(self, cidade_origem, cidade_destino, horario_saida, valor):
