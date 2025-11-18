@@ -1,4 +1,4 @@
-import googlemaps
+#import googlemaps
 from datetime import datetime
 
 gmaps = googlemaps.Client(key='') # Configurando e colocando chave de acesso na  API
