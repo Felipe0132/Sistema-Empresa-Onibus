@@ -1,10 +1,17 @@
 import datetime
 from Linhas.Linha import Linha
+import customtkinter as ctk
 
 def mostrar_linhas(dirct_linhas):
     print("Linha disponiveis:")
     for linhas in dirct_linhas.keys():
         print(linhas.nome, end=", ")
+
+def retornar_linhas(dirct_linhas):
+    linhas_disponiveis = list()
+    for linhas in dirct_linhas.keys():
+        linhas_disponiveis.append(linhas.nome)
+    return linhas_disponiveis
 
 def mostrar_linhas_detalhadas(dirct_linhas):
     print("Linhas e Onibus:")
@@ -46,16 +53,17 @@ def remover_linha(dirct_linhas, linha):
         print(e)
 
 def adicionar_linha(dirct_linhas, linha):
-    if linha in dirct_linhas:
-        print("Linha ja existente!")
-        return
+    for linha_existente, lista_onibus in dirct_linhas.items():
+        if linha.cidade_origem == linha_existente.cidade_origem and linha.cidade_destino == linha_existente.cidade_destino and linha.horario_saida == linha_existente.horario_saida:
+            print("Linha ja existente!") # Aqui ele compara item a item da nova linha e das linhas existentes, para nao duplicar. E precisa comparar elemento a elemento, porque os Objs sao diferentes
+            return
     
     dirct_linhas[linha] = list() # Criando a chave da linha
 
 def atualizar_onibus(dirct_linhas, dados_user):
     lista_aux = list()
 
-    data_user_dia = datetime.datetime.now()
+    data_user_dia = datetime.datetime.now() # Pega 
     data_user_hora = data_user_dia.time()
 
     try:
