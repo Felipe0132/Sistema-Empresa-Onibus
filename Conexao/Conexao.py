@@ -35,7 +35,7 @@ def adicionar_linha(dirct_linha, linha):
         print("Linha ja existente!")
         return
     
-    dirct_linha[linha] 
+    dirct_linha[linha] = list() # Criando a chave da linha
 
 def atualizar_onibus(dirct_linha, dados_user):
     lista_aux = list()
