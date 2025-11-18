@@ -8,7 +8,6 @@ class Onibus():
         self.assentos_ocupados = list()
         self.nome = f"{data_partida}"
 
-        pass
 
     def reservar_assento(self, assento):
         if assento in self.assentos_ocupados:

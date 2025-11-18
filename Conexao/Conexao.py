@@ -30,6 +30,13 @@ def remover_linha(dirct_linha, linha):
         print("Ocorreu um erro ao adicionar!")
         print(e)
 
+def adicionar_linha(dirct_linha, linha):
+    if linha in dirct_linha:
+        print("Linha ja existente!")
+        return
+    
+    dirct_linha[linha] 
+
 def atualizar_onibus(dirct_linha, dados_user):
     lista_aux = list()
 
