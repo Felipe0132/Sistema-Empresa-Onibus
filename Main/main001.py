@@ -55,7 +55,7 @@ def janela_adicionar_linha(): # Funcao para criar a janela responsavel para reco
 
         verificacao = Conexao.adicionar_linha(linhas, Linha(cidade_origem.get(), cidade_destino.get(), datetime.strptime(horario_saida.get(), "%d/%m/%Y %H:%M"), float(valor.get()))) # Aqui retorna algo para o exception olhar
     except Exception as e:
-        texto = ctk.CTkLabel(janela_adicionar_onibus, text=f"Error {e}", text_color='black', font=('Arial', 17)) # Mostrando as linhas que podem receber onibus
+        texto = ctk.CTkLabel(janela_adicionar_linha, text=f"Error {e}", text_color='black', font=('Arial', 17)) # Mostrando as linhas que podem receber onibus
         texto.pack(pady=2)
 
     btn_inserir = ctk.CTkButton(janela_botoes,text="Inserir", command=lambda: Conexao.adicionar_linha(linhas, Linha(cidade_origem.get(), cidade_destino.get(), datetime.strptime(horario_saida.get(), "%d/%m/%Y %H:%M"), float(valor.get()))))
