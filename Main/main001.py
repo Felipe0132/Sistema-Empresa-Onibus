@@ -44,7 +44,13 @@ def janela_adicionar_linha(): # Funcao para criar a janela responsavel para reco
         cidade_destino.pack(pady=10)
 
         horario_saida = ctk.CTkEntry(janela_adicionar_linha, placeholder_text="Digite a data e hora de saída do ônibus (DD/MM/AAAA HH:MM): ", width=320, height=50)
-        horario_saida.pack(pady=10) #TODO
+        horario_saida.pack(pady=10)
+
+        #colocar isso aqui na função que o usuário digita o horário da linha na função vou fazer amanhã
+        texto = horario_saida.get()  
+        horario_saida_formatado = datetime.datetime.strptime(texto, "%d/%m/%Y %H:%M")
+        hora = horario_saida_formatado.time()
+
 
         valor = ctk.CTkEntry(janela_adicionar_linha, placeholder_text="Digite o valor R$... ", width=320, height=50)
         valor.pack(pady=10)

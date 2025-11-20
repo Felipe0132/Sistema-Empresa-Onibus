@@ -60,7 +60,7 @@ def adicionar_linha(dirct_linhas, linha):
     
     dirct_linhas[linha] = list() # Criando a chave da linha
 
-def atualizar_onibus(dirct_linhas, dados_user):
+def atualizar_onibus(dirct_linhas, dados_user): # Função que paga a data local e verifica os ônibus disponíveis nauquele momento
     lista_aux = list()
 
     data_user_dia = datetime.datetime.now() # Pega 
