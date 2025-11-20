@@ -7,10 +7,10 @@ def mostrar_linhas(dirct_linhas):
     for linhas in dirct_linhas.keys():
         print(linhas.nome, end=", ")
 
-def retornar_linhas(dirct_linhas):
-    linhas_disponiveis = list()
-    for linhas in dirct_linhas.keys():
-        linhas_disponiveis.append(linhas.nome)
+def retornar_linhas(dict_linhas):
+    linhas_disponiveis = []
+    for linha in dict_linhas.keys():
+        linhas_disponiveis.append(linha.nome)
     return linhas_disponiveis
 
 def mostrar_linhas_detalhadas(dirct_linhas):
@@ -20,21 +20,17 @@ def mostrar_linhas_detalhadas(dirct_linhas):
         for onibus in lista_onibus:
             print(onibus.data_partida, end=", ")
 
-def adicionar_onibus(dirct_linhas, linha, onibus):
-    lista_onibus = list()
-
+def adicionar_onibus(dict_linhas, linha, onibus):
     try:
-        if linha in dirct_linhas.keys(): # Caso a linha ja existir
-            lista_onibus.append(dirct_linhas[linha]) # Cria uma lista auxiliar com todos os onibus que ja haviam
-            lista_onibus.append(onibus)
-
-            dirct_linhas[linha] = lista_onibus
-
-            print("Onibus adicionado a linha!")
+        # Se a linha já existe
+        if linha in dict_linhas:
+            dict_linhas[linha].append(onibus)
+            print("Ônibus adicionado à linha existente!")
             return
-
-        dirct_linhas[linha] = onibus # Caso nao existir no dicionario, a linha comeca so com esse onibus
-        print("Onibus e linha adicionados juntos!")
+        
+        # Senão, cria nova lista com esse ônibus
+        dict_linhas[linha] = [onibus]
+        print("Ônibus e nova linha adicionados!")
 
     except Exception as e:
         print("Ocorreu um erro ao adicionar!")
@@ -53,10 +49,13 @@ def remover_linha(dirct_linhas, linha):
         print(e)
 
 def adicionar_linha(dirct_linhas, linha):
-    for linha_existente, lista_onibus in dirct_linhas.items():
-        if linha.cidade_origem == linha_existente.cidade_origem and linha.cidade_destino == linha_existente.cidade_destino and linha.horario_saida == linha_existente.horario_saida:
-            print("Linha ja existente!") # Aqui ele compara item a item da nova linha e das linhas existentes, para nao duplicar. E precisa comparar elemento a elemento, porque os Objs sao diferentes
-            return
+    try:
+        for linha_existente, lista_onibus in dirct_linhas.items():
+            if linha.cidade_origem == linha_existente.cidade_origem and linha.cidade_destino == linha_existente.cidade_destino and linha.horario_saida == linha_existente.horario_saida:
+                return f"Linha adicionada!"  # Aqui ele compara item a item da nova linha e das linhas existentes, para nao duplicar. E precisa comparar elemento a elemento, porque os Objs sao diferentes 
+    except Exception as e:
+        return f"Erro: {e}"                                                                                           
+    
     
     dirct_linhas[linha] = list() # Criando a chave da linha
 

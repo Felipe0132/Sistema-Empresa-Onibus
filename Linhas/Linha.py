@@ -8,9 +8,9 @@ class Linha():
 
         self.cidade_origem = cidade_origem
         self.cidade_destino = cidade_destino
-        self.horario_saida = horario_saida
+        self.horario_saida = horario_saida.time() # Garante pegar somente o horario
         self.valor = valor
-        self.nome = f"{cidade_origem} para {cidade_destino} as {horario_saida}"
+        self.nome = f"{cidade_origem} para {cidade_destino} as {horario_saida.time()}"
         #self.estimar_horario_chegada()
 
 
