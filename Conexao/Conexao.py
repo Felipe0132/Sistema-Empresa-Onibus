@@ -20,17 +20,14 @@ def mostrar_linhas_detalhadas(dirct_linhas):
         for onibus in lista_onibus:
             print(onibus.data_partida, end=", ")
 
-def adicionar_onibus(dict_linhas, linha, onibus):
+def adicionar_onibus(dict_linhas, linha_nome, onibus):
     try:
         # Se a linha já existe
-        if linha in dict_linhas:
-            dict_linhas[linha].append(onibus)
-            print("Ônibus adicionado à linha existente!")
-            return
-        
-        # Senão, cria nova lista com esse ônibus
-        dict_linhas[linha] = [onibus]
-        print("Ônibus e nova linha adicionados!")
+        for linha in dict_linhas.keys():
+            if linha_nome == linha.nome:
+                dict_linhas[linha].append(onibus)
+                print("Ônibus adicionado à linha existente!")
+                return
 
     except Exception as e:
         print("Ocorreu um erro ao adicionar!")

@@ -76,8 +76,8 @@ def janela_adicionar_onibus(): # Funcao para criar a janela responsavel para rec
     horario_saida = ctk.CTkEntry(jan_adicionar_onibus, placeholder_text="Digite a data de saida...", width=320, height=50)
     horario_saida.pack(pady=10)
 
-    linha = ctk.CTkEntry(jan_adicionar_onibus, placeholder_text="Digite a linha que deseja adicionar...", width=320, height=50)
-    linha.pack(pady=10)
+    linha_nome = ctk.CTkEntry(jan_adicionar_onibus, placeholder_text="Digite a linha que deseja adicionar...", width=320, height=50)
+    linha_nome.pack(pady=10)
 
     texto = ctk.CTkLabel(jan_adicionar_onibus, text="Lista de Linhas Disponiveis", text_color='black', font=('Arial', 22)) # Mostrando as linhas que podem receber onibus
     texto.pack(pady=10)
@@ -94,7 +94,7 @@ def janela_adicionar_onibus(): # Funcao para criar a janela responsavel para rec
     janela_botoes = ctk.CTkFrame(jan_adicionar_onibus, fg_color="white")
     janela_botoes.pack(pady=5)
 
-    btn_inserir = ctk.CTkButton(janela_botoes,text="Inserir", command=lambda: Conexao.adicionar_onibus(linhas, linha.get(), Onibus(datetime.strptime(horario_saida.get(), "%d/%m/%Y"))))
+    btn_inserir = ctk.CTkButton(janela_botoes,text="Inserir", command=lambda: Conexao.adicionar_onibus(linhas, linha_nome.get(), Onibus(datetime.strptime(horario_saida.get(), "%d/%m/%Y"))))
     btn_inserir.pack(side="left", padx=5)   
     # A funcao datetime.strptime converte o que foi recebido na caixa para valores de data       
 
