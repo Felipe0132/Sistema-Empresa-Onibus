@@ -3,10 +3,11 @@ import numpy as np
 class Onibus():
 
     def __init__(self, data_partida):
-        self.datas_partida = data_partida
+        self.data_partida = data_partida
         self.assentos_disponiveis = np.arange(1, 21)
         self.assentos_ocupados = list()
-        self.nome = f"{data_partida}"
+        self.data_formatada = data_partida.strftime("%d/%m/%Y")
+        self.nome = f"{self.data_formatada}"
 
 
     def reservar_assento(self, assento):

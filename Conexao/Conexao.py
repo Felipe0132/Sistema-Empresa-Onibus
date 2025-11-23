@@ -2,6 +2,27 @@ import datetime
 from Linhas.Linha import Linha
 import customtkinter as ctk
 
+def janela_aviso(mensagem, cor):
+
+    # Criar janela
+
+    janela = ctk.CTkToplevel()
+    janela.title("AVISO") # Nome da janela
+    janela.geometry("500x80") # Tamanho
+    janela.configure(fg_color="white")
+
+    janela_aviso = ctk.CTkFrame(janela, fg_color="white") # Cor de fundo
+    janela_aviso.pack(fill="both", expand=True) # Cria um widget, fill é o preenchimento, expand seria a responsividade do tamanho
+
+    aviso = ctk.CTkLabel(janela_aviso, text=mensagem, text_color=cor, font=('Arial',17))
+    aviso.pack(pady=10)
+
+    botao = ctk.CTkButton(janela_aviso, text="OK", command=janela.destroy)
+    botao.pack(pady=5)
+
+    janela.after(10, janela.lift)
+
+
 def mostrar_linhas(dirct_linhas):
     print("Linha disponiveis:")
     for linhas in dirct_linhas.keys():
@@ -12,6 +33,16 @@ def retornar_linhas(dict_linhas):
     for linha in dict_linhas.keys():
         linhas_disponiveis.append(linha.nome)
     return linhas_disponiveis
+
+def retornar_linhas_onibus(dict_linhas):
+    vendas =  []
+    for linha, lista_onibus in dict_linhas.items():
+        dados = f"Linha {linha.nome}: "
+        for onibus in lista_onibus:
+            dados += f"{onibus.nome}, "
+        vendas.append(dados)
+
+    return vendas
 
 def mostrar_linhas_detalhadas(dirct_linhas):
     print("Linhas e Onibus:")
@@ -26,12 +57,13 @@ def adicionar_onibus(dict_linhas, linha_nome, onibus):
         for linha in dict_linhas.keys():
             if linha_nome == linha.nome:
                 dict_linhas[linha].append(onibus)
-                print("Ônibus adicionado à linha existente!")
+                janela_aviso("Onibus adicionado!", "green")
                 return
+            
+        janela_aviso("Linha inexistente!", "red")
 
     except Exception as e:
-        print("Ocorreu um erro ao adicionar!")
-        print(e)
+        janela_aviso(e, "red")
     
 def remover_linha(dirct_linhas, linha):
     try:
@@ -49,9 +81,14 @@ def adicionar_linha(dirct_linhas, linha):
     try:
         for linha_existente, lista_onibus in dirct_linhas.items():
             if linha.cidade_origem == linha_existente.cidade_origem and linha.cidade_destino == linha_existente.cidade_destino and linha.horario_saida == linha_existente.horario_saida:
-                return f"Linha adicionada!"  # Aqui ele compara item a item da nova linha e das linhas existentes, para nao duplicar. E precisa comparar elemento a elemento, porque os Objs sao diferentes 
+                janela_aviso("Linha ja existente!", "green")  # Aqui ele compara item a item da nova linha e das linhas existentes, para nao duplicar. E precisa comparar elemento a elemento, porque os Objs sao diferentes 
+                return
     except Exception as e:
-        return f"Erro: {e}"                                                                                           
+        janela_aviso(f"Ocorreu o erro {e}", "red")    
+        return
+    
+    dirct_linhas[linha] = []
+    janela_aviso("Linha adicionado!", "green")                                                                                    
     
     
     dirct_linhas[linha] = list() # Criando a chave da linha
