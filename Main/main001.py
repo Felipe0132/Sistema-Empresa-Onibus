@@ -9,6 +9,7 @@ import customtkinter as ctk # Interface grafica
 
 linhas = dict()
 
+datetime_user = datetime.now()
 
 #FUNÇOES PARA INTERFACE
 
@@ -112,8 +113,8 @@ def janela_adicionar_onibus(): # Funcao para criar a janela responsavel para rec
 
     def inserir(): # Pelo motivo da interface grafica nao aceitar funcoes com parametros, cria-se uma para usar e manipular na interface grafica
         try:
-            data = datetime.strptime(data_saida.get(), "%d/%m/%Y")
-
+            data = datetime.strptime(data_saida.get(), "%d/%m/%Y") # Transforma ela em String
+            
             novo_onibus = Onibus(data) # Pegando os dados da interface e transformando na linha
 
             Conexao.adicionar_onibus(linhas, linha_nome.get(), novo_onibus) # Funcao de adicionar linha
@@ -131,8 +132,34 @@ def janela_adicionar_onibus(): # Funcao para criar a janela responsavel para rec
     btn_voltar = ctk.CTkButton(janela_botoes, text="Voltar", command=jan_adicionar_onibus.destroy, fg_color="#4682B4", text_color="white")
     btn_voltar.pack(side="left", padx=5) 
 
-def janela_reservar_lugar():
-    print()
+def janela_reservar_lugar(linhas, linha_existente, onibus, datetime_user):
+    janela_reservar_lugar = ctk.CTkToplevel(janela)
+    janela_reservar_lugar.title("Lugares disponiveis")
+    janela_reservar_lugar.geometry("500x450")
+    janela_reservar_lugar.configure(fg_color='white')
+
+    titulo = ctk.CTkLabel(janela_reservar_lugar, text="Escolha um lugar", text_color='black', font=('Arial', 25))
+    titulo.pack(pady=10)    
+
+    lugar_escolhido = ctk.CTkEntry(janela_reservar_lugar, placeholder_text="Digite um lugar disponivel (1 a 20)...", width=320, height=50)
+    lugar_escolhido.pack(pady=10)
+
+    texto = ctk.CTkLabel(janela_reservar_lugar, text="Lugares", text_color='black', font=('Arial', 25))
+    texto.pack(pady=10)
+
+    lugares_onibus = ctk.CTkFrame(janela_reservar_lugar, fg_color='white')
+    lugares_onibus.pack(pady=5) # Aqui vai criar a sessao para imprirmir os lugares do onibus
+
+    # Frame onde os lugares serão exibidos
+    frame_lugares = ctk.CTkFrame(janela_reservar_lugar, fg_color="white")
+    frame_lugares.pack(pady=5)
+
+    for numero in range(1, 21):
+        if numero in onibus.assentos_disponiveis():
+            cor = 'green'
+        else:
+            cor = 'red'
+        lugares = ctk.CTkLabel(frame_lugares, text=str(numero), text_color=cor)
 
 def janela_comprar_passagem():
     janela_comprar_passagem = ctk.CTkToplevel(janela)
@@ -164,6 +191,7 @@ def janela_comprar_passagem():
     def buscar_lugares():
         try:
             data = datetime.strptime(data_saida.get(), "%d/%m/%Y")
+            data = data.strftime("%d/%m/%Y") # Transfomra no objeto de datas
 
             linha_nome = linha.get()
 
@@ -171,11 +199,15 @@ def janela_comprar_passagem():
                 if linha_existente.nome == linha_nome:
                     for onibus in lista_onibus:
                         if onibus.data_formatada == data:
-                            janela_reservar_lugar(linhas, linha_existente, data, data_user)
+                            janela_reservar_lugar(linhas, linha_existente, onibus, datetime_user)
                             return
-                    Conexao.janela_aviso("Onibus nao pertecem a essa linha!", "red")
+        
+                    # Só cai aqui se não achou nenhum onibus igual
+                    Conexao.janela_aviso("Ônibus não pertencem a essa linha!", "red")
                     return
-            Conexao.janela_aviso("Linha no existe!", "red")
+
+            # Só chega aqui se nao ahcar a linha
+            Conexao.janela_aviso("Linha não existe!", "red")
 
         except ValueError:
             Conexao.janela_aviso("Dados inválidos. Verifique Informacoes passadas.", "red")

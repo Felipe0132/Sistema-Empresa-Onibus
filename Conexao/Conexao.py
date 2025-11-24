@@ -44,6 +44,9 @@ def retornar_linhas_onibus(dict_linhas):
 
     return vendas
 
+def retornar_lugares(onibus):
+    
+
 def mostrar_linhas_detalhadas(dirct_linhas):
     print("Linhas e Onibus:")
     for linhas, lista_onibus in dirct_linhas.items():
@@ -119,7 +122,7 @@ def atualizar_onibus(dirct_linhas, dados_user): # Função que paga a data local
         print(e)
 
 def reservar_linha_onibus(dirct_linhas, linha, data, dados_user):
-    if not data < dados_user.dataatual: # TODO 
+    if not data < dados_user.data_atual: # TODO 
         if dirct_linhas:
             for linha_existentes, lista_onibus in dirct_linhas.items():
                 if linha_existentes.nome == linha.nome:
