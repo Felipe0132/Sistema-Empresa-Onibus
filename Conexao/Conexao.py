@@ -44,8 +44,7 @@ def retornar_linhas_onibus(dict_linhas):
 
     return vendas
 
-def retornar_lugares(onibus):
-    
+
 
 def mostrar_linhas_detalhadas(dirct_linhas):
     print("Linhas e Onibus:")
