@@ -20,7 +20,7 @@ ctk.set_default_color_theme("blue")
 
 janela = ctk.CTk()
 janela.title("Empresa Rodoviaria") # Nome da janela
-janela.geometry("800x700") # Tamanho
+janela.geometry("800x850") # Tamanho
 
 janela_inicial = ctk.CTkFrame(janela, fg_color="white") # Cor de fundo
 janela_inicial.pack(fill="both", expand=True) # Cria um widget, fill é o preenchimento, expand seria a responsividade do tamanho
@@ -132,7 +132,12 @@ def janela_adicionar_onibus(): # Funcao para criar a janela responsavel para rec
     btn_voltar = ctk.CTkButton(janela_botoes, text="Voltar", command=jan_adicionar_onibus.destroy, fg_color="#4682B4", text_color="white")
     btn_voltar.pack(side="left", padx=5) 
 
-def janela_reservar_lugar(linhas, linha_existente, onibus, datetime_user):
+def janela_reservar_lugar(linhas, linha_existente, onibus):
+
+    if not Conexao.verifica_reserva(linha_existente, onibus):
+        return
+
+
     janela_reservar_lugar = ctk.CTkToplevel(janela)
     janela_reservar_lugar.title("Lugares disponiveis")
     janela_reservar_lugar.geometry("500x450")
@@ -152,14 +157,41 @@ def janela_reservar_lugar(linhas, linha_existente, onibus, datetime_user):
 
     # Frame onde os lugares serão exibidos
     frame_lugares = ctk.CTkFrame(janela_reservar_lugar, fg_color="white")
-    frame_lugares.pack(pady=5)
+    frame_lugares.pack(pady=2)  
 
-    for numero in range(1, 21):
-        if numero in onibus.assentos_disponiveis():
+    for coluna, numero in enumerate(range(1, 20 + 1)):
+        if numero in onibus.assentos_disponiveis:
             cor = 'green'
         else:
             cor = 'red'
+
         lugares = ctk.CTkLabel(frame_lugares, text=str(numero), text_color=cor)
+        lugares.pack(side="left", padx=3)
+
+
+    def reservar_lugar():
+        try:
+            lugar = int(lugar_escolhido.get())
+
+            onibus.reservar_assento(lugar)
+
+        except ValueError:
+            Conexao.janela_aviso("Tipo invalido!","red")
+
+        except Exception as e:
+            Conexao.janela_aviso(f"Error: {e}", "red")
+
+    # Cria o campo dos botões abaixo, para não conflitar com o espaço
+    janela_botoes = ctk.CTkFrame(janela_reservar_lugar, fg_color="white")
+    janela_botoes.pack(pady=4)
+
+    btn_marcar_lugar = ctk.CTkButton(janela_botoes,text="Marcar Lugar", command= reservar_lugar, height=40, width=150, font=("Arial", 16))
+    btn_marcar_lugar.pack(side="left", padx=20, pady=4)   
+    # A funcao datetime.strptime converte o que foi recebido na caixa para valores de data       
+
+    btn_voltar = ctk.CTkButton(janela_botoes, text="Voltar", command=janela_reservar_lugar.destroy, fg_color="#4682B4", text_color="white", height=40, width=150, font=("Arial", 16))
+    btn_voltar.pack(side="left", padx=20, pady=4) 
+
 
 def janela_comprar_passagem():
     janela_comprar_passagem = ctk.CTkToplevel(janela)
@@ -176,17 +208,20 @@ def janela_comprar_passagem():
     linha = ctk.CTkEntry(janela_comprar_passagem, placeholder_text="Digite a linha que deseja adicionar...", width=320, height=50)
     linha.pack(pady=10)
 
-    linhas_onibus_disponiveis = Conexao.retornar_linhas_onibus(linhas)
+    texto = ctk.CTkLabel(janela_comprar_passagem, text="Lista de Linhas Disponiveis", text_color='black', font=('Arial', 22)) # Mostrando as linhas que podem receber onibus
+    texto.pack(pady=10)
+
+    linhas_disponiveis = Conexao.retornar_linhas(linhas) # Aqui cria uma lista de linhas para puder imprimir os dados melhor
 
     scrolllist = ctk.CTkScrollableFrame(janela_comprar_passagem, orientation=ctk.VERTICAL, width=320) # Cria uma parte de scroll na janela
     scrolllist.pack(pady=5)
 
-    for lin_dados in linhas_onibus_disponiveis:
-        ctk.CTkLabel(scrolllist, text=lin_dados).pack(pady=2)
+    for linha_disp in linhas_disponiveis:
+        ctk.CTkLabel(scrolllist, text=linha_disp).pack(pady=2) # Aqui ele coloca na caixa de scroll os itens da lista
 
     # Cria o campo dos botões abaixo, para não conflitar com o espaço
     janela_botoes = ctk.CTkFrame(janela_comprar_passagem, fg_color="white")
-    janela_botoes.pack(pady=5)
+    janela_botoes.pack(pady=3)
 
     def buscar_lugares():
         try:
@@ -199,7 +234,7 @@ def janela_comprar_passagem():
                 if linha_existente.nome == linha_nome:
                     for onibus in lista_onibus:
                         if onibus.data_formatada == data:
-                            janela_reservar_lugar(linhas, linha_existente, onibus, datetime_user)
+                            janela_reservar_lugar(linhas, linha_existente, onibus)
                             return
         
                     # Só cai aqui se não achou nenhum onibus igual
@@ -216,14 +251,169 @@ def janela_comprar_passagem():
             Conexao.janela_aviso(f"Erro: {e}", "red")
 
     btn_inserir = ctk.CTkButton(janela_botoes,text="Olhar lugares", command= buscar_lugares)
-    btn_inserir.pack(side="left", padx=5)   
+    btn_inserir.pack(side="left", padx=3)   
     # A funcao datetime.strptime converte o que foi recebido na caixa para valores de data       
 
     btn_voltar = ctk.CTkButton(janela_botoes, text="Voltar", command=janela_comprar_passagem.destroy, fg_color="#4682B4", text_color="white")
-    btn_voltar.pack(side="left", padx=5) 
+    btn_voltar.pack(side="left", padx=3) 
             
-            
-                    
+
+def janela_editar_rota():
+    janela_editar_rota = ctk.CTkToplevel(janela)
+    janela_editar_rota.title("Editando Rota")
+    janela_editar_rota.geometry("500x550")
+    janela_editar_rota.configure(fg_color='white')
+
+    titulo = ctk.CTkLabel(janela_editar_rota, text="Novos Dados", text_color='black', font=('Arial', 25))
+    titulo.pack(pady=7)
+
+    linha_original = ctk.CTkEntry(janela_editar_rota, placeholder_text="Digite a linha que deseja editar...", width=320, height=50)
+    linha_original.pack(pady=5)
+
+    cidade_origem = ctk.CTkEntry(janela_editar_rota, placeholder_text="Digite a cidade origem...", width=320, height=50)
+    cidade_origem.pack(pady=5)
+
+    cidade_destino = ctk.CTkEntry(janela_editar_rota, placeholder_text="Digite a cidade destino...", width=320, height=50)
+    cidade_destino.pack(pady=5)
+
+    texto = ctk.CTkLabel(janela_editar_rota, text="Lista de Linhas Disponiveis", text_color='black', font=('Arial', 22)) # Mostrando as linhas que podem receber onibus
+    texto.pack(pady=5)
+
+    linhas_onibus_disponiveis = Conexao.retornar_linhas_onibus(linhas)
+
+    scrolllist = ctk.CTkScrollableFrame(janela_editar_rota, orientation="vertical", width=320, height=200) # Cria uma parte de scroll na janela
+    scrolllist.pack(pady=5)
+
+    for lin_dados in linhas_onibus_disponiveis:
+        ctk.CTkLabel(scrolllist, text=lin_dados).pack(pady=2)
+
+    def editar():
+        try:
+            Conexao.editar_rota(linhas, linha_original.get(), cidade_origem.get(), cidade_destino.get())
+        except ValueError:
+            Conexao.janela_aviso("Dados Invalidos!", "red")
+        except Exception as e:
+            Conexao.janela_aviso(f"Error: {e}")
+
+    janela_botoes = ctk.CTkFrame(janela_editar_rota, fg_color="white")
+    janela_botoes.pack(pady=3)
+    
+    btn_editar = ctk.CTkButton(janela_botoes,text="Editar", command=editar)
+    btn_editar.pack(side="left", padx=3)
+ 
+    btn_voltar = ctk.CTkButton(janela_botoes, text="Voltar", command=janela_editar_rota.destroy, fg_color="#4682B4", text_color="white")
+    btn_voltar.pack(side="left", padx=3) 
+
+def janela_editar_horario():
+    janela_editar_horario = ctk.CTkToplevel(janela)
+    janela_editar_horario.title("Editar Horario")
+    janela_editar_horario.geometry("500x600")
+    janela_editar_horario.configure(fg_color='white')
+
+    titulo = ctk.CTkLabel(janela_editar_horario, text="Novos Dados", text_color='black', font=('Arial', 25))
+    titulo.pack(pady=5)
+
+    linha_original = ctk.CTkEntry(janela_editar_horario, placeholder_text="Digite a linha que deseja editar...", width=320, height=50)
+    linha_original.pack(pady=2)
+
+    novo_horario = ctk.CTkEntry(janela_editar_horario, placeholder_text="Digite o novo horario...", width=320, height=50)
+    novo_horario.pack(pady=2)
+
+    linhas_onibus_disponiveis = Conexao.retornar_linhas_onibus(linhas)
+
+    scrolllist = ctk.CTkScrollableFrame(janela_editar_horario, orientation="vertical", width=320, height=200) # Cria uma parte de scroll na janela
+    scrolllist.pack(pady=5)
+
+    for lin_dados in linhas_onibus_disponiveis:
+        ctk.CTkLabel(scrolllist, text=lin_dados).pack(pady=2)
+
+    def editar():
+        try:
+            horario_saida = datetime.strptime(novo_horario.get(), "%H:%M")
+
+            Conexao.editar_horario(linhas, str(linha_original.get()), horario_saida)
+        except ValueError:
+            Conexao.janela_aviso("Dados Invalidos!", "red")
+        except Exception as e:
+            Conexao.janela_aviso(f"Error: {e}", "red")
+
+    # Cria o campo dos botões abaixo, para não conflitar com o espaço
+    janela_botoes = ctk.CTkFrame(janela_editar_horario, fg_color="white")
+    janela_botoes.pack(pady=3)
+
+    btn_editar = ctk.CTkButton(janela_botoes,text="Editar", command= editar)
+    btn_editar.pack(side="left", padx=3)   
+    # A funcao datetime.strptime converte o que foi recebido na caixa para valores de data       
+
+    btn_voltar = ctk.CTkButton(janela_botoes, text="Voltar", command=janela_editar_horario.destroy, fg_color="#4682B4", text_color="white")
+    btn_voltar.pack(side="left", padx=3) 
+
+def janela_remover_onibus():
+    janela_remover_onibus = ctk.CTkToplevel(janela)
+    janela_remover_onibus.title("Removendo Onibus")
+    janela_remover_onibus.geometry("500x450")
+    janela_remover_onibus.configure(fg_color='white')
+
+    titulo = ctk.CTkLabel(janela_remover_onibus, text="Removendo Dados", text_color='black', font=('Arial', 25))
+    titulo.pack(pady=5)
+
+    linha_original = ctk.CTkEntry(janela_remover_onibus, placeholder_text="Digite a linha que deseja editar...", width=320, height=50)
+    linha_original.pack(pady=2)
+
+    data_onibus = ctk.CTkEntry(janela_remover_onibus, placeholder_text="Digite a data do onibus...", width=320, height=50)
+    data_onibus.pack(pady=2)
+
+    texto = ctk.CTkLabel(janela_remover_onibus, text="Lista de Linhas Disponiveis", text_color='black', font=('Arial', 22)) # Mostrando as linhas que podem receber onibus
+    texto.pack(pady=2)
+
+    linhas_onibus_disponiveis = Conexao.retornar_linhas_onibus(linhas)
+
+    scrolllist = ctk.CTkScrollableFrame(janela_remover_onibus, orientation="vertical", width=320, height=200) # Cria uma parte de scroll na janela
+    scrolllist.pack(pady=5)
+
+    for lin_dados in linhas_onibus_disponiveis:
+        ctk.CTkLabel(scrolllist, text=lin_dados).pack(pady=2)
+
+    def editar():
+        try:
+            data = datetime.strptime(data_onibus.get(), "%d/%m/%Y")
+            data = data.strftime("%d/%m/%Y") # Transfomra no objeto de datas
+
+            Conexao.remover_onibus(linhas, str(linha_original.get()), data)
+        except ValueError:
+            Conexao.janela_aviso("Dados Invalidos!", "green")
+        except Exception as e:
+            Conexao.janela_aviso(f"Error: {e}")
+
+    # Cria o campo dos botões abaixo, para não conflitar com o espaço
+    janela_botoes = ctk.CTkFrame(janela_remover_onibus, fg_color="white")
+    janela_botoes.pack(pady=2)
+
+    btn_editar = ctk.CTkButton(janela_botoes,text="Editar", command=editar)
+    btn_editar.pack(side="left", padx=3)
+ 
+    btn_voltar = ctk.CTkButton(janela_botoes, text="Voltar", command=janela_remover_onibus.destroy, fg_color="#4682B4", text_color="white")
+    btn_voltar.pack(side="left", padx=3)
+
+def janela_editar_linhas():
+    janela_editar_linhas = ctk.CTkToplevel(janela)
+    janela_editar_linhas.title("Opcoes de Edicao")
+    janela_editar_linhas.geometry("500x450")
+    janela_editar_linhas.configure(fg_color='white')
+
+    titulo = ctk.CTkLabel(janela_editar_linhas, text="Opcoes", text_color='black', font=('Arial', 25))
+    titulo.pack(pady=10)
+
+    editar_rotas = ctk.CTkButton(janela_editar_linhas, text="Editar Rota", command=janela_editar_rota, width=270, height=70, font=("Arial Rounded MT Bold", 19))
+    editar_rotas.pack(pady=15)
+
+    editar_horario = ctk.CTkButton(janela_editar_linhas, text="Editar Horario", command=janela_editar_horario, width=270, height=70, font=("Arial Rounded MT Bold", 19))
+    editar_horario.pack(pady=15)
+
+    remover_onibus = ctk.CTkButton(janela_editar_linhas, text="Remover Onibus", command=janela_remover_onibus, width=270, height=70, font=("Arial Rounded MT Bold", 19))
+    remover_onibus.pack(pady=15)
+
+
 
 
 #----------------------------------------------------------------------------------__#
@@ -247,11 +437,14 @@ botao2.pack(pady=15)
 botao3 = ctk.CTkButton(janela, text="Comprar passagem", command=janela_comprar_passagem, width=270, height=70, font=("Arial Rounded MT Bold", 19))
 botao3.pack(pady=15)
 
-botao4 = ctk.CTkButton(janela, text="Editar linhas", command=" ", width=270, height=70, font=("Arial Rounded MT Bold", 19))
+botao4 = ctk.CTkButton(janela, text="Editar linhas", command=janela_editar_linhas, width=270, height=70, font=("Arial Rounded MT Bold", 19))
 botao4.pack(pady=15)
 
 botao5 = ctk.CTkButton(janela, text="Relatorios", command=" ", width=270, height=70, font=("Arial Rounded MT Bold", 19))
 botao5.pack(pady=15)
+
+botao6 = ctk.CTkButton(janela, text="Receber .txt", command=" ", width=270, height=70, font=("Arial Rounded MT Bold", 19))
+botao6.pack(pady=15)
 
 
 """

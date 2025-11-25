@@ -8,10 +8,15 @@ class Linha():
 
         self.cidade_origem = cidade_origem
         self.cidade_destino = cidade_destino
-        self.horario_saida = horario_saida.time() # Garante pegar somente o horario
+
+        if isinstance(horario_saida, datetime): # Garante pegar somente o horario
+            self.horario_saida = horario_saida.time()
+        else:
+            self.horario_saida = horario_saida
+
         self.valor = valor
-        hora_formatada = horario_saida.strftime("%H:%M")
-        self.nome = f"{cidade_origem} para {cidade_destino} as {hora_formatada}"
+        self.hora_formatada = self.horario_saida.strftime("%H:%M")
+        self.nome = f"{cidade_origem} para {cidade_destino} as {self.hora_formatada}"
         #self.estimar_horario_chegada()
 
 

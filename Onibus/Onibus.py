@@ -1,4 +1,6 @@
 import numpy as np
+import customtkinter as ctk
+import Conexao.Conexao as Conexao
 
 class Onibus():
 
@@ -12,18 +14,24 @@ class Onibus():
 
     def reservar_assento(self, assento):
         if assento > 0 and assento < 21:        
-            if not self.assentos_disponiveis:
-                print("Todos os assentos ocupado!")
+
+            # Converter numpy array para lista, se necessário para evitar erros
+            if not isinstance(self.assentos_disponiveis, list):
+                self.assentos_disponiveis = list(self.assentos_disponiveis)
+
+            if len(self.assentos_disponiveis) == 0:
+                Conexao.janela_aviso("Assentos indisponiveis!", 'red')
                 return True
 
             if assento in self.assentos_ocupados:
-                print("Assento ocupado!")
+                Conexao.janela_aviso("Assento escolhido ocupado!", 'red')
                 return False
                 
+            Conexao.janela_aviso(f"Assento {assento} reservado! Atualize para ver disponibilidade!", 'green')    
             self.assentos_disponiveis.remove(assento)
             self.assentos_ocupados.append(assento)
         else:
-            print("Nao reservar!")
+            Conexao.janela_aviso("Lugar indiponivel!", "red")
             return False
 
     def mostrar_assentos(self):

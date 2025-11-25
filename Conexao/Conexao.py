@@ -56,9 +56,13 @@ def mostrar_linhas_detalhadas(dirct_linhas):
 def adicionar_onibus(dict_linhas, linha_nome, onibus):
     try:
         # Se a linha já existe
-        for linha in dict_linhas.keys():
-            if linha_nome == linha.nome:
-                dict_linhas[linha].append(onibus)
+        for linha in dict_linhas.keys(): # Percorre as linhas existentes
+            if linha_nome == linha.nome: # Quando a linha nome encontrar um linha que existe
+                for onibus_existentes in dict_linhas[linha]: # Anda dentro da lista de onibus dessa linha
+                    if onibus_existentes.nome == onibus.nome: # Se existir um onibus igual, ele nao cria outro
+                        janela_aviso("Onibus ja existe!", "green")
+                        return
+                dict_linhas[linha].append(onibus) # Se nao existir, cria o onibus
                 janela_aviso("Onibus adicionado!", "green")
                 return
             
@@ -110,7 +114,9 @@ def atualizar_onibus(dirct_linhas, dados_user): # Função que paga a data local
 
                     dirct_linhas[linha] = lista_aux # Atualiza a lista de onibus
 
-                if onibus.data_partida == dados_user.data: # Verifica os onibus que estao no mesmo dia
+                    
+
+                if onibus.data_partida == dados_user.data: # Verifica os onibus que estao no .nomem já partiu. Hora esmo dia
                     if linha.horario_saida < data_user_hora: # Se o horario de sair ja estiver passado
                         lista_aux = lista_onibus
                         lista_aux.remove(onibus) # Remove os onibus que ja passaram do horario
@@ -119,6 +125,9 @@ def atualizar_onibus(dirct_linhas, dados_user): # Função que paga a data local
     except Exception as e:
         print("Ocorreu um erro ao adicionar!")
         print(e)
+
+def verifica_reserva(linha, onibus):
+    return True
 
 def reservar_linha_onibus(dirct_linhas, linha, data, dados_user):
     if not data < dados_user.data_atual: # TODO 
@@ -152,62 +161,68 @@ def editar_linha(dirct_linhas):
 
 
     
-def editar_rota(dirct_linhas):
-    mostrar_linhas(dirct_linhas)
-
-    linha = input("Digite o nome da linha que deseja alterar: (CONFORME APARECE A CIMA!) ")
-
-    if not linha in dirct_linhas.keys():
-        print("Linha nao existe!")
-    else:
+def editar_rota(dirct_linhas, linha_original, cidade_origem, cidade_destino):
+    try:
         for linha in dirct_linhas.keys():
-            if linha == dirct_linhas.nome:
-                cidade_origem = input("Digite a cidade origem: ")
-                cidade_destino = input("Digite o destino")
-
+            if linha.nome == linha_original:
                 linha_aux = Linha(cidade_origem, cidade_destino, linha.horario_saida, linha.valor)
 
                 dirct_linhas[linha_aux] = dirct_linhas[linha]
 
-                remover_linha(dirct_linhas, linha)
+                del dirct_linhas[linha]
 
-def editar_horario(dirct_linhas):
-    mostrar_linhas(dirct_linhas)
+                janela_aviso("Linha atualizada!", "green")
+                return
+            
+        janela_aviso("Linha nao encontrada!", "red")
+    except ValueError:
+        janela_aviso("Tipo de dados invalidos!", "red")
+    except Exception as e:
+        janela_aviso(f"Error: {e}", "red")
 
-    linha = input("Digite o nome da linha que deseja alterar: (CONFORME APARECE A CIMA!) ")
-
-    if not linha in dirct_linhas.keys():
-        print("Linha nao existe!")
-    else:
-        for linha in dirct_linhas.keys():
-            if linha == dirct_linhas.nome:
-                horario_saida = input("Digite o novo horario") #TODO
-
-                linha_aux = Linha(linha.cidade_origem, linha.cidade_destino, horario_saida, linha.valor)
-
-                dirct_linhas[linha_aux] = dirct_linhas[linha]
-
-                remover_linha(dirct_linhas, linha)
-
-def remover_onibus(dirct_linhas):
-    mostrar_linhas(dirct_linhas)
-    contador_iguais = 0
-
-    linha = input("Digite o nome da linha que deseja alterar: (CONFORME APARECE A CIMA!) ")
-
-    if not linha in dirct_linhas.keys():
-        print("Linha nao existe!")
-    else:
+def editar_horario(dirct_linhas, linha_original, novo_horario):
+    try:
+        
         for linha, lista_onibus in dirct_linhas.items():
-            if linha == dirct_linhas.nome:
-                onibus_select = input("Digite a data de onibus que deseja remover") #TODO
+            if linha.nome == linha_original:
 
                 for onibus in lista_onibus:
-                    if onibus.data == onibus_select:
-                        dirct_linhas[linha].remove(onibus)
-                        contador_iguais += 1
+                    if onibus.data_formatada == novo_horario:
+                        janela_aviso("Esse onibus ja existe nessa linha, antiga removida!", "orange")
+                        return
+                    
+                linha_atualizada = Linha(linha.cidade_origem, linha.cidade_destino, novo_horario, linha.valor)
+                dirct_linhas[linha_atualizada] = lista_onibus
+                del dirct_linhas[linha]
+                janela_aviso("horario alterado!", "green")
+                return
+        
+        janela_aviso("Linha nao encontrada!", "red")
+    except ValueError:
+        janela_aviso("Tipo de dados invalidos!", "red")
+    except Exception as e:
+        janela_aviso(f"Error: {e}")
+
+def remover_onibus(dirct_linhas, linha_desejada, nova_data):
+    try:
+        for linha, lista_onibus in dirct_linhas.items():
+            if linha.nome == linha_desejada:
+
+                for onibus in lista_onibus:
+                    if onibus.data_formatada == nova_data:
+                        lista_onibus.remove(onibus)
+                        janela_aviso("Onibus removido com sucesso", "green")
+                        return
+                janela_aviso("Onibus nao encontrado!", "red") # Se nao cair no if ele nao encontra onibus
+                return
                 
-    if contador_iguais == 0:
-        print("Nenhum onibus assim!")
+            janela_aviso("Linha nao existente!", "red") # Se chegar aqui eh porque nao achou a linha desejada
+            return
+    except ValueError:
+        janela_aviso("Tipo de dados invalidos!", "red")
+    except Exception as e:
+        janela_aviso(f"Error: {e}")    
+      
+    
                         
         
