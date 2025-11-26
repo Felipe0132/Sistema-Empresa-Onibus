@@ -102,7 +102,7 @@ def adicionar_linha(dirct_linhas, linha):
 def atualizar_onibus(dirct_linhas, dados_user): # Função que paga a data local e verifica os ônibus disponíveis nauquele momento
     lista_aux = list()
 
-    data_user_dia = datetime.datetime.now() # Pega 
+    data_user_dia = datetime.datetime.now() # Pega a data do usuário
     data_user_hora = data_user_dia.time()
 
     try:
@@ -126,7 +126,25 @@ def atualizar_onibus(dirct_linhas, dados_user): # Função que paga a data local
         print("Ocorreu um erro ao adicionar!")
         print(e)
 
-def verifica_reserva(linha, onibus):
+def verifica_reserva(dirct_linhas, linha, onibus):
+    dados_user = datetime.datetime.now()
+
+    # Cria variáveis separadas com padroes certos para fazer comparacoes
+    data_user = dados_user.date()
+    hora_user = dados_user.time()
+
+    data_onibus = datetime.datetime.strptime(onibus.data_formatada, "%d/%m/%Y").date()
+    hora_linha = datetime.datetime.strptime(linha.hora_formatada, "%H:%M").time()
+
+    if data_user > data_onibus:
+        janela_aviso("Onibus ja partiu neste dia!", "red")
+        return False
+    
+    if data_user == data_onibus:
+        if hora_user > hora_linha:
+            janela_aviso("Onibus ja partiu neste horario!", "red")
+            return False
+        
     return True
 
 def reservar_linha_onibus(dirct_linhas, linha, data, dados_user):
@@ -221,8 +239,78 @@ def remover_onibus(dirct_linhas, linha_desejada, nova_data):
     except ValueError:
         janela_aviso("Tipo de dados invalidos!", "red")
     except Exception as e:
-        janela_aviso(f"Error: {e}")    
+        janela_aviso(f"Error: {e}")   
+
+def vendas_mes_linha(dirct_linhas, linha_desejada):
+    # Pegando os dados do usuario e partindo ele
+    dados_user = datetime.datetime.now()
+    mes_user = dados_user.month
+    ano_user = dados_user.year
+    vendas_totais = 0
+    try:
+        for linha, lista_onibus in dirct_linhas.items(): # Percorre todo o dicionario de linhas
+            if linha.nome == linha_desejada: # Se a linha existir ele entra no if
+                for onibus in lista_onibus: # Percorre por todos os onibus que existem na linha
+                    mes_onibus = mes_onibus = onibus.data_partida.month # Pega o mes do onibus
+                    ano_onibus = onibus.data_partida.year # Pega o ano do onibus
+                    if mes_user == mes_onibus and ano_user == ano_onibus: # Se o mes e ano for igual ao atual, ele entra no if
+                        vendas_totais += linha.valor * len(onibus.assentos_ocupados) # Aqui ele soma o valor arrecadado total e soma com, o produto do valor da passagem pelos assentos ja reservados
+                janela_aviso(f"Vendas totais do mes : R$ {vendas_totais}", "black")
+                return
+        janela_aviso("Linha nao encontrada!", "red")
+        return
+    except ValueError:
+        janela_aviso("Tipo de dados invalidos!", "red")
+    except Exception as e:
+        janela_aviso(f"Error: {e}", "red")   
+
+
+
+def vendas_mes_linha_txt():
+    print()
       
+def percentual_ocupacao(dirct_linhas, linha):
+    data_user = datetime.datetime.today()
+    dia_da_semana = data_user.strftime("%A")
     
+    #for linha, lista_onibus in dirct_linhas.iten
+
+def reservar_lugar_txt(dirct_linhas, linha_nome, data, assento):
+    try:
+        for linha_existente, lista_onibus in dirct_linhas.items():
+            if linha_existente.nome == linha_nome:
+                for onibus in lista_onibus:
+                    if onibus.data_formatada == data:
+
+                        if not verifica_reserva(dirct_linhas, linha_existente, onibus):
+                            return
                         
-        
+                        onibus.reservar_assento(assento)
+                        return
+                janela_aviso("Onibus nao pertence a essa linha!","red")
+                return
+        janela_aviso("Linha nao existe!", "red")
+    except ValueError:
+        janela_aviso("Tipo invalido!","red")
+
+    except Exception as e:
+        janela_aviso(f"Error: {e}", "red")
+
+
+
+def ler_arquivo(dirct_linhas, arquivo):
+    try:
+        with open(f"txt/{arquivo}", "r", encoding="utf-8") as arq:
+            for linha in arq:
+                linha = linha.strip() # Para quando desce a linha
+                infos = linha.split() # Separa todas as partes no espaco
+                linha = f"{infos[0]} para {infos[1]} as {infos[2]}"
+                data = datetime.strptime(infos[3], "%d/%m/%Y")
+                data = data.strftime("%d/%m/%Y") # Transfomra no objeto de datas
+                assento = int(infos[4])
+
+                reservar_linha_onibus(dirct_linhas, linha, data, assento)
+    except FileNotFoundError:
+        janela_aviso("Arquivo nao encontrado!", "red")
+    except Exception as e:
+        janela_aviso(f"Error {e}", "red")

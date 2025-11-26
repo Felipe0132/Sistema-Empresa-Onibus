@@ -9,3 +9,4 @@ def vendas_do_mes(dirct_linhas, dados_user):
                     valor_arrecadado += len(onibus.assentos_ocupados) * linha.valor
 
     print(f"O valor arrecado eh R$ {valor_arrecadado}")
+
