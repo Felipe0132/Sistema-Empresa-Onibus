@@ -5,6 +5,7 @@ from Onibus.Onibus import Onibus
 import Conexao.Conexao as Conexao
 import datetime
 import customtkinter as ctk # Interface grafica
+import tkinter as tk
 
 linhas = dict()
 
@@ -116,7 +117,11 @@ def janela_adicionar_onibus(): # Funcao para criar a janela responsavel para rec
             
             novo_onibus = Onibus(data) # Pegando os dados da interface e transformando na linha
 
-            Conexao.adicionar_onibus(linhas, linha_nome.get(), novo_onibus) # Funcao de adicionar linha
+            for linha_existente in linhas:
+                if linha_existente.nome == linha_nome.get():
+                    Conexao.adicionar_onibus(linhas, linha_existente, novo_onibus) # Funcao de adicionar linha
+
+            
 
         except ValueError:
             Conexao.janela_aviso("Dados inválidos. Verifique Informacoes passadas.", "red")
@@ -198,7 +203,7 @@ def janela_reservar_lugar(linhas, linha_existente, onibus):
 def janela_comprar_passagem():
     janela_comprar_passagem = ctk.CTkToplevel(janela)
     janela_comprar_passagem.title("Comprando passagem")
-    janela_comprar_passagem.geometry("500x500")
+    janela_comprar_passagem.geometry("800x500")
     janela_comprar_passagem.configure(fg_color='white')
 
     titulo = ctk.CTkLabel(janela_comprar_passagem, text="Escolha os dados", text_color='black', font=('Arial', 25))
@@ -215,11 +220,36 @@ def janela_comprar_passagem():
 
     linhas_disponiveis = Conexao.retornar_linhas_onibus(linhas) # Aqui cria uma lista de linhas para puder imprimir os dados melhor
 
-    scrolllist = ctk.CTkScrollableFrame(janela_comprar_passagem, orientation=ctk.VERTICAL, width=320) # Cria uma parte de scroll na janela
-    scrolllist.pack(pady=5)
+        # --- FRAME CONTÊINER (CustomTkinter) ---
+    ctk_frame_scroll = ctk.CTkFrame(janela_comprar_passagem, fg_color="white")
+    ctk_frame_scroll.pack(pady=5)
 
+    # --- CANVAS (Tkinter) ---
+    canvas = tk.Canvas(ctk_frame_scroll, width=500, height=200)
+    canvas.pack(side="left", fill="both", expand=True)
+
+    # --- SCROLLBARS ---
+    scroll_y = tk.Scrollbar(ctk_frame_scroll, orient="vertical", command=canvas.yview)
+    scroll_y.pack(side="right", fill="y")
+
+    scroll_x = tk.Scrollbar(janela_comprar_passagem, orient="horizontal", command=canvas.xview)
+    scroll_x.pack(fill="x")
+
+    canvas.configure(yscrollcommand=scroll_y.set, xscrollcommand=scroll_x.set)
+
+    # --- INTERIOR DO CANVAS ---
+    frame_interno = tk.Frame(canvas)
+    canvas.create_window((0, 0), window=frame_interno, anchor="nw")
+
+    # --- Preencher com os textos das linhas ---
     for linha_disp in linhas_disponiveis:
-        ctk.CTkLabel(scrolllist, text=linha_disp).pack(pady=2) # Aqui ele coloca na caixa de scroll os itens da lista
+        tk.Label(frame_interno, text=linha_disp, anchor="w").pack(pady=2)
+
+    # --- Atualizar área scrollável ---
+    def ajustar_scroll(event):
+        canvas.configure(scrollregion=canvas.bbox("all"))
+
+    frame_interno.bind("<Configure>", ajustar_scroll)
 
     # Cria o campo dos botões abaixo, para não conflitar com o espaço
     janela_botoes = ctk.CTkFrame(janela_comprar_passagem, fg_color="white")
@@ -320,13 +350,39 @@ def janela_editar_horario():
     novo_horario = ctk.CTkEntry(janela_editar_horario, placeholder_text="Digite o novo horario...", width=320, height=50)
     novo_horario.pack(pady=2)
 
-    linhas_onibus_disponiveis = Conexao.retornar_linhas_onibus(linhas)
+    linhas_disponiveis = Conexao.retornar_linhas_onibus(linhas)
 
-    scrolllist = ctk.CTkScrollableFrame(janela_editar_horario, orientation="vertical", width=320, height=200) # Cria uma parte de scroll na janela
-    scrolllist.pack(pady=5)
+        # --- FRAME CONTÊINER (CustomTkinter) ---
+    ctk_frame_scroll = ctk.CTkFrame(janela_comprar_passagem, fg_color="white")
+    ctk_frame_scroll.pack(pady=5)
 
-    for lin_dados in linhas_onibus_disponiveis:
-        ctk.CTkLabel(scrolllist, text=lin_dados).pack(pady=2)
+    # --- CANVAS (Tkinter) ---
+    canvas = tk.Canvas(ctk_frame_scroll, width=500, height=200)
+    canvas.pack(side="left", fill="both", expand=True)
+
+    # --- SCROLLBARS ---
+    scroll_y = tk.Scrollbar(ctk_frame_scroll, orient="vertical", command=canvas.yview)
+    scroll_y.pack(side="right", fill="y")
+
+    scroll_x = tk.Scrollbar(janela_comprar_passagem, orient="horizontal", command=canvas.xview)
+    scroll_x.pack(fill="x")
+
+    canvas.configure(yscrollcommand=scroll_y.set, xscrollcommand=scroll_x.set)
+
+    # --- INTERIOR DO CANVAS ---
+    frame_interno = tk.Frame(canvas)
+    canvas.create_window((0, 0), window=frame_interno, anchor="nw")
+
+    # --- Preencher com os textos das linhas ---
+    for linha_disp in linhas_disponiveis:
+        tk.Label(frame_interno, text=linha_disp, anchor="w").pack(pady=2)
+
+    # --- Atualizar área scrollável ---
+    def ajustar_scroll(event):
+        canvas.configure(scrollregion=canvas.bbox("all"))
+
+    frame_interno.bind("<Configure>", ajustar_scroll)
+
 
     def editar():
         try:
@@ -367,13 +423,40 @@ def janela_remover_onibus():
     texto = ctk.CTkLabel(janela_remover_onibus, text="Lista de Linhas Disponiveis", text_color='black', font=('Arial', 22)) # Mostrando as linhas que podem receber onibus
     texto.pack(pady=2)
 
-    linhas_onibus_disponiveis = Conexao.retornar_linhas_onibus(linhas)
+    linhas_disponiveis = Conexao.retornar_linhas_onibus(linhas)
 
-    scrolllist = ctk.CTkScrollableFrame(janela_remover_onibus, orientation="vertical", width=320, height=200) # Cria uma parte de scroll na janela
-    scrolllist.pack(pady=5)
 
-    for lin_dados in linhas_onibus_disponiveis:
-        ctk.CTkLabel(scrolllist, text=lin_dados).pack(pady=2)
+        # --- FRAME CONTÊINER (CustomTkinter) ---
+    ctk_frame_scroll = ctk.CTkFrame(janela_comprar_passagem, fg_color="white")
+    ctk_frame_scroll.pack(pady=5)
+
+    # --- CANVAS (Tkinter) ---
+    canvas = tk.Canvas(ctk_frame_scroll, width=500, height=200)
+    canvas.pack(side="left", fill="both", expand=True)
+
+    # --- SCROLLBARS ---
+    scroll_y = tk.Scrollbar(ctk_frame_scroll, orient="vertical", command=canvas.yview)
+    scroll_y.pack(side="right", fill="y")
+
+    scroll_x = tk.Scrollbar(janela_comprar_passagem, orient="horizontal", command=canvas.xview)
+    scroll_x.pack(fill="x")
+
+    canvas.configure(yscrollcommand=scroll_y.set, xscrollcommand=scroll_x.set)
+
+    # --- INTERIOR DO CANVAS ---
+    frame_interno = tk.Frame(canvas)
+    canvas.create_window((0, 0), window=frame_interno, anchor="nw")
+
+    # --- Preencher com os textos das linhas ---
+    for linha_disp in linhas_disponiveis:
+        tk.Label(frame_interno, text=linha_disp, anchor="w").pack(pady=2)
+
+    # --- Atualizar área scrollável ---
+    def ajustar_scroll(event):
+        canvas.configure(scrollregion=canvas.bbox("all"))
+
+    frame_interno.bind("<Configure>", ajustar_scroll)
+
 
     def editar():
         try:

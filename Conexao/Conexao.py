@@ -1,6 +1,7 @@
 import datetime
 from Linhas.Linha import Linha
 import customtkinter as ctk
+from Onibus.Onibus import Onibus
 
 def janela_aviso(mensagem, cor):
 
@@ -53,11 +54,11 @@ def mostrar_linhas_detalhadas(dirct_linhas):
         for onibus in lista_onibus:
             print(onibus.data_partida, end=", ")
 
-def adicionar_onibus(dict_linhas, linha_nome, onibus):
+def adicionar_onibus(dict_linhas, linha_desejada, onibus):
     try:
         # Se a linha já existe
         for linha in dict_linhas.keys(): # Percorre as linhas existentes
-            if linha_nome == linha.nome: # Quando a linha nome encontrar um linha que existe
+            if linha_desejada.nome == linha.nome: # Quando a linha nome encontrar um linha que existe
                 for onibus_existentes in dict_linhas[linha]: # Anda dentro da lista de onibus dessa linha
                     if onibus_existentes.nome == onibus.nome: # Se existir um onibus igual, ele nao cria outro
                         janela_aviso("Onibus ja existe!", "green")
@@ -85,19 +86,27 @@ def remover_linha(dirct_linhas, linha):
 
 def adicionar_linha(dirct_linhas, linha):
     try:
-        for linha_existente, lista_onibus in dirct_linhas.items():
+        for linha_existente in dirct_linhas.keys():
             if linha.cidade_origem == linha_existente.cidade_origem and linha.cidade_destino == linha_existente.cidade_destino and linha.horario_saida == linha_existente.horario_saida:
-                janela_aviso("Linha ja existente!", "green")  # Aqui ele compara item a item da nova linha e das linhas existentes, para nao duplicar. E precisa comparar elemento a elemento, porque os Objs sao diferentes 
+                janela_aviso("Linha já existente!", "red")
                 return
     except Exception as e:
         janela_aviso(f"Ocorreu o erro {e}", "red")    
         return
     
-    dirct_linhas[linha] = []
+    dirct_linhas[linha] = list()
+    
+    data_usuario = datetime.datetime.now().date()
+    
+    for dia in range(30):
+        dia_onibus = data_usuario + datetime.timedelta(days=dia) #Soma a data pela vez que o for esta
+        
+        onibus = Onibus(dia_onibus)
+
+        dirct_linhas[linha].append(onibus)
+
     janela_aviso("Linha adicionado!", "green")                                                                                    
     
-    
-    dirct_linhas[linha] = list() # Criando a chave da linha
 
 def atualizar_onibus(dirct_linhas, dados_user): # Função que paga a data local e verifica os ônibus disponíveis nauquele momento
     lista_aux = list()

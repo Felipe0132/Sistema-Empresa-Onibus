@@ -1,6 +1,26 @@
 import numpy as np
 import customtkinter as ctk
-import Conexao.Conexao as Conexao
+
+def janela_aviso(mensagem, cor):
+
+    # Criar janela
+
+    janela = ctk.CTkToplevel()
+    janela.title("AVISO") # Nome da janela
+    janela.geometry("500x80") # Tamanho
+    janela.configure(fg_color="white")
+
+    janela_aviso = ctk.CTkFrame(janela, fg_color="white") # Cor de fundo
+    janela_aviso.pack(fill="both", expand=True) # Cria um widget, fill é o preenchimento, expand seria a responsividade do tamanho
+
+    aviso = ctk.CTkLabel(janela_aviso, text=mensagem, text_color=cor, font=('Arial',17))
+    aviso.pack(pady=10)
+
+    botao = ctk.CTkButton(janela_aviso, text="OK", command=janela.destroy)
+    botao.pack(pady=5)
+
+    janela.after(10, janela.lift)
+
 
 class Onibus():
 
@@ -20,18 +40,18 @@ class Onibus():
                 self.assentos_disponiveis = list(self.assentos_disponiveis)
 
             if len(self.assentos_disponiveis) == 0:
-                Conexao.janela_aviso("Assentos indisponiveis!", 'red')
+                janela_aviso("Assentos indisponiveis!", 'red')
                 return True
 
             if assento in self.assentos_ocupados:
-                Conexao.janela_aviso("Assento escolhido ocupado!", 'red')
+                janela_aviso("Assento escolhido ocupado!", 'red')
                 return False
                 
-            Conexao.janela_aviso(f"Assento {assento} reservado! Atualize para ver disponibilidade!", 'green')    
+            janela_aviso(f"Assento {assento} reservado! Atualize para ver disponibilidade!", 'green')    
             self.assentos_disponiveis.remove(assento)
             self.assentos_ocupados.append(assento)
         else:
-            Conexao.janela_aviso("Lugar indiponivel!", "red")
+            janela_aviso("Lugar indiponivel!", "red")
             return False
 
     def mostrar_assentos(self):
