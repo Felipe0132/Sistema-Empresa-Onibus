@@ -1,5 +1,7 @@
 import numpy as np
 import customtkinter as ctk
+from Conexao.Conexao import registrar_erro
+
 
 def janela_aviso(mensagem, cor):
 
@@ -41,17 +43,20 @@ class Onibus():
 
             if len(self.assentos_disponiveis) == 0:
                 janela_aviso("Assentos indisponiveis!", 'red')
-                return True
+                registrar_erro(f"[{self.data_formatada}] Reserva não realizada: ônibus cheio")
+                return False
 
             if assento in self.assentos_ocupados:
                 janela_aviso("Assento escolhido ocupado!", 'red')
+                registrar_erro(f"[{self.data_formatada}] Reserva não realizada: assento {assento} já ocupado")
                 return False
                 
             janela_aviso(f"Assento {assento} reservado! Atualize para ver disponibilidade!", 'green')    
             self.assentos_disponiveis.remove(assento)
             self.assentos_ocupados.append(assento)
-        else:
+        else: #Esse else n tem utildade como o lugar é indisponivel
             janela_aviso("Lugar indiponivel!", "red")
+            registrar_erro(f"[{self.data_formatada}] Reserva não realizada: assento {assento} inválido (1–20)")
             return False
 
     def mostrar_assentos(self):

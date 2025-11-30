@@ -2,6 +2,7 @@ import datetime
 from Linhas.Linha import Linha
 import customtkinter as ctk
 from Onibus.Onibus import Onibus
+import os
 
 def janela_aviso(mensagem, cor):
 
@@ -277,13 +278,88 @@ def vendas_mes_linha(dirct_linhas, linha_desejada):
 
 def vendas_mes_linha_txt():
     print()
-      
-def percentual_ocupacao(dirct_linhas, linha):
-    data_user = datetime.datetime.today()
-    dia_da_semana = data_user.strftime("%A")
-    
-    #for linha, lista_onibus in dirct_linhas.iten
 
+
+def registrar_erro(mensagem):
+    try:
+        # Cria a pasta logs se não existir
+        if not os.path.exists("logs"):
+            os.makedirs("logs")
+
+        # Pega data e hora atual
+        data_hora = datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+
+        # Monta a linha que será escrita no txt
+        linha = f"[{data_hora}] - {mensagem}\n"
+
+        # Abre (ou cria) o arquivo e adiciona a nova linha
+        with open("logs/logs_erros.txt", "a", encoding="utf-8") as arquivo:
+            arquivo.write(linha)
+
+    except Exception as e:
+        # FAILSAFE: evita que erro dentro da função quebre o sistema
+        print("Falha ao registrar erro:", e)
+
+
+import datetime
+
+def matriz_percentual_ocupacao(dirct_linhas):
+    """
+    Gera uma matriz onde:
+    - cada linha da matriz representa uma linha de ônibus
+    - cada coluna representa um dia da semana
+    - cada célula contém a ocupação média (%)
+    """
+    
+    # Dias da semana na ordem certa da matriz
+    dias_semana = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+    
+    matriz_resultado = []     # Aqui ficará a matriz final
+    nomes_linhas = []         # Guarda os nomes das linhas (para o usuário exibir depois)
+
+    # Percorre todas as entradas do dicionário: linha -> lista de ônibus
+    for chave_linha, lista_onibus in dirct_linhas.items():
+        
+        # Guarda nome da linha
+        nomes_linhas.append(chave_linha)
+
+        # Aqui guardaremos ocupação média de cada dia dessa linha
+        ocupacoes_semanais = []  
+        
+        # Para cada dia da semana, vamos calcular a média
+        for dia in dias_semana:
+
+            porcentagens = []  # guarda % de ocupação de cada ônibus que roda nesse dia
+
+            # Agora percorremos todos os ônibus da linha
+            for onibus in lista_onibus:
+
+                # Descobrir o dia da semana desse ônibus
+                dia_onibus = onibus.data_partida.strftime("%A")
+
+                # Se esse ônibus roda no dia que estamos calculando
+                if dia_onibus == dia:
+                    ocupados = len(onibus.assentos_ocupados)
+                    porcentagem = (ocupados / 20) * 100
+                    porcentagens.append(porcentagem)
+
+            # Terminamos de verificar os ônibus desse dia
+            # Agora calculamos a média
+            if len(porcentagens) > 0:
+                media = sum(porcentagens) / len(porcentagens)
+            else:
+                media = 0  # Se nenhum ônibus rodou nesse dia
+
+            # Adiciona a média desse dia
+            ocupacoes_semanais.append(media)
+
+        # Terminou os 7 dias → adiciona linha completa na matriz
+        matriz_resultado.append(ocupacoes_semanais)
+
+    return matriz_resultado, nomes_linhas
+
+
+    
 def reservar_lugar_txt(dirct_linhas, linha_nome, data, assento):
     try:
         for linha_existente, lista_onibus in dirct_linhas.items():
