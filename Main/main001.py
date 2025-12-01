@@ -353,7 +353,7 @@ def janela_editar_horario():
     linhas_disponiveis = Conexao.retornar_linhas_onibus(linhas)
 
         # --- FRAME CONTÊINER (CustomTkinter) ---
-    ctk_frame_scroll = ctk.CTkFrame(janela_comprar_passagem, fg_color="white")
+    ctk_frame_scroll = ctk.CTkFrame(janela_editar_horario, fg_color="white")
     ctk_frame_scroll.pack(pady=5)
 
     # --- CANVAS (Tkinter) ---
@@ -364,7 +364,7 @@ def janela_editar_horario():
     scroll_y = tk.Scrollbar(ctk_frame_scroll, orient="vertical", command=canvas.yview)
     scroll_y.pack(side="right", fill="y")
 
-    scroll_x = tk.Scrollbar(janela_comprar_passagem, orient="horizontal", command=canvas.xview)
+    scroll_x = tk.Scrollbar(janela_editar_horario, orient="horizontal", command=canvas.xview)
     scroll_x.pack(fill="x")
 
     canvas.configure(yscrollcommand=scroll_y.set, xscrollcommand=scroll_x.set)
@@ -427,7 +427,7 @@ def janela_remover_onibus():
 
 
         # --- FRAME CONTÊINER (CustomTkinter) ---
-    ctk_frame_scroll = ctk.CTkFrame(janela_comprar_passagem, fg_color="white")
+    ctk_frame_scroll = ctk.CTkFrame(janela_remover_onibus, fg_color="white")
     ctk_frame_scroll.pack(pady=5)
 
     # --- CANVAS (Tkinter) ---
@@ -438,7 +438,7 @@ def janela_remover_onibus():
     scroll_y = tk.Scrollbar(ctk_frame_scroll, orient="vertical", command=canvas.yview)
     scroll_y.pack(side="right", fill="y")
 
-    scroll_x = tk.Scrollbar(janela_comprar_passagem, orient="horizontal", command=canvas.xview)
+    scroll_x = tk.Scrollbar(janela_remover_onibus, orient="horizontal", command=canvas.xview)
     scroll_x.pack(fill="x")
 
     canvas.configure(yscrollcommand=scroll_y.set, xscrollcommand=scroll_x.set)
@@ -591,10 +591,10 @@ def janela_receber_txt():
     texto = ctk.CTkLabel(janela_receber_txt, text="Uma linha por reserva", text_color='black', font=('Arial', 19)) # Mostrando as linhas que podem receber onibus
     texto.pack(pady=6)
 
-    texto = ctk.CTkLabel(janela_receber_txt, text="(Cidade saida) (Cidade destino) (HR/MM) (DIA/MES/ANO) (Lugar)", text_color='black', font=('Arial', 19)) # Mostrando as linhas que podem receber onibus
+    texto = ctk.CTkLabel(janela_receber_txt, text="(Cidade saida), (Cidade destino) (HR/MM), (DIA/MES/ANO), (Lugar)", text_color='black', font=('Arial', 19)) # Mostrando as linhas que podem receber onibus
     texto.pack(pady=16)
 
-    texto = ctk.CTkLabel(janela_receber_txt, text="Os espaço são limitantes de Dados,não escreva cidades compostas!", text_color='black', font=('Arial', 19)) # Mostrando as linhas que podem receber onibus
+    texto = ctk.CTkLabel(janela_receber_txt, text="As virgulas são limitantes de Dados, tome cuidado com o que separa!", text_color='black', font=('Arial', 19)) # Mostrando as linhas que podem receber onibus
     texto.pack(pady=6)
 
     arquivo_ler = ctk.CTkEntry(janela_receber_txt, placeholder_text="Digite o nome do arquivo que deseja ler...", width=320, height=50)

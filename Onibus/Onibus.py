@@ -1,6 +1,7 @@
 import numpy as np
 import customtkinter as ctk
-from Conexao.Conexao import registrar_erro
+import datetime
+import os
 
 
 def janela_aviso(mensagem, cor):
@@ -22,6 +23,27 @@ def janela_aviso(mensagem, cor):
     botao.pack(pady=5)
 
     janela.after(10, janela.lift)
+
+def registrar_erro(mensagem):
+    try:
+        # Cria a pasta logs se não existir
+        if not os.path.exists("logs"):
+            os.makedirs("logs")
+
+        # Pega data e hora atual
+        data_hora = datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+
+        # Monta a linha que será escrita no txt
+        linha = f"[{data_hora}] - {mensagem}\n"
+
+        # Abre (ou cria) o arquivo e adiciona a nova linha
+        with open("logs/logs_erros.txt", "a", encoding="utf-8") as arquivo:
+            arquivo.write(linha)
+
+    except Exception as e:
+        # FAILSAFE: evita que erro dentro da função quebre o sistema
+        print("Falha ao registrar erro:", e)
+
 
 
 class Onibus():
