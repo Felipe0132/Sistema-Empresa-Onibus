@@ -41,8 +41,6 @@ def retornar_linhas_onibus(dict_linhas): # Retorna a linha e onibus disponiveis
 
     return vendas # Retorna a lista
 
-
-
 def mostrar_linhas_detalhadas(dict_linhas): # Mesma funcao do retorno mas imprime
     print("Linhas e Onibus:")
     for linhas, lista_onibus in dict_linhas.items():
@@ -125,39 +123,7 @@ def verifica_reserva(dict_linhas, linha, onibus): # Função que verifica se é 
             return False
         
     return True # Se não parar em nenhuma restição, OK para horario e data
-
-def reservar_linha_onibus(dict_linhas, linha, data, dados_user):
-    if not data < dados_user.data_atual: # TODO 
-        if dict_linhas:
-            for linha_existentes, lista_onibus in dict_linhas.items():
-                if linha_existentes.nome == linha.nome:
-                    for onibus in lista_onibus:
-                        if onibus.data_partida == data:
-                            if onibus.mostrar_assentos():
-                                return
-    else:
-        print("Onibus ja partiram!")
-                        
-def editar_linha(dict_linhas): 
-    print("Qual acao deseja realizar?")
-    print("[1] Editar rota da linha\n[2] Editar horarios\n[3] Remover algum onibus\n")
-    resp = input("Digite a opcao desejada")
-
-    match resp:
-        case "1":
-            editar_rota()
-        
-        case "2":
-            editar_horario()
-
-        case "3":
-            remover_onibus()
-        
-        case _:
-            print("Opcao invalida!")
-
-
-    
+                          
 def editar_rota(dict_linhas, linha_original, cidade_origem, cidade_destino): # Alterar uma rota
     try:
         for linha in dict_linhas.keys(): # Percorre todas as linhas
