@@ -92,7 +92,7 @@ def adicionar_linha(dict_linhas, linha): # Função de adicionar linha
     # Assim que a linha é criada, ela terá que inicializar com onibus de 30 datas apartir dela, dela mais 30
 
     for dia in range(30): # Faz um for de 0 a 30
-        dia_onibus = data_usuario + datetime.timedelta(days=dia) #Soma a data pela vez que o for esta
+        dia_onibus = data_usuario + datetime.timedelta(days=dia) # Coloca a data do ônibus sempre igual a mais a variável dia do for a data do usuário até dar 30
         
         onibus = Onibus(dia_onibus) # Cria um onibus com a data da variavel
 
