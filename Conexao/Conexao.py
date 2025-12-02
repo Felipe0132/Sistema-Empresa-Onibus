@@ -235,9 +235,6 @@ def salvar_relatorio_vendas_txt(dict_linhas, linha_desejada, mes):
 
 def registrar_erro(mensagem):
     try:
-        # Cria a pasta logs se não existir
-        if not os.path.exists("logs"):
-            os.makedirs("logs")
 
         # Pega data e hora atual
         data_hora = datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
@@ -251,8 +248,7 @@ def registrar_erro(mensagem):
 
     except Exception as e:
         # FAILSAFE: evita que erro dentro da função quebre o sistema
-        print("Falha ao registrar erro:", e)
-
+        janela_aviso(f"Falha ao registrar erro: {e}", "red")
 
 def matriz_percentual_ocupacao(dict_linhas, linha_desejada):
     """

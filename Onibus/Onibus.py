@@ -27,10 +27,6 @@ def janela_aviso(mensagem, cor): # Funcao que recebe uma mensagem e cor para apa
 
 def registrar_erro(mensagem): # Funcao que registra erro em um arquivo .txt
     try:
-        # Cria a pasta logs se não existir
-        if not os.path.exists("logs"):
-            os.makedirs("logs")
-
         # Pega data e hora atual
         data_hora = datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
 
@@ -43,7 +39,7 @@ def registrar_erro(mensagem): # Funcao que registra erro em um arquivo .txt
 
     except Exception as e:
         # FAILSAFE: evita que erro dentro da função quebre o sistema
-        print("Falha ao registrar erro:", e)
+        janela_aviso(f"Falha ao registrar erro: {e}", "red")
 
 # -------------------------------------------------------------
 

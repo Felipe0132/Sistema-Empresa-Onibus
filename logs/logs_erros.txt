@@ -1,2 +1,0 @@
-[01/12/2025 18:28:00] - [10/12/2025] Reserva não realizada: assento 3 já ocupado
-[01/12/2025 18:28:28] - [10/12/2025] Reserva não realizada: assento 3 já ocupado
