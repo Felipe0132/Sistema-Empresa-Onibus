@@ -115,6 +115,11 @@ def verifica_reserva(dict_linhas, linha, onibus): # Função que verifica se é 
         registrar_erro("Reserva nao realizada: Onibus ja partiu neste dia!")
         return False
     
+    if data_onibus > data_user + datetime.timedelta(days=30):
+        janela_aviso("Data do ônibus é após o limite de 30 dias a partir de hoje!", "red")
+        registrar_erro("Reserva não realizada: Data do ônibus é após o limite de 30 dias!")
+        return False
+    
     if data_user == data_onibus: # Se o onibus for no mesmo dia que deseja fazer a reserva
         if hora_user > hora_linha: # Se o horario ja tiver passado, não é possivel
             janela_aviso("Onibus ja partiu neste horario!", "red")
