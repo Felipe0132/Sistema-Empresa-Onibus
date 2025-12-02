@@ -126,15 +126,16 @@ Mini-janelas exibem as linhas cadastradas para facilitar a navegação.
 
 ##  Estrutura do Código (Resumo)
 
-    Main
+    Main/Interface
      └── main001.py
     Linhas
      └── Linha.py
     Onibus
      └── Onibus.py
-    Interface
-     ├── telas.py
-     ├── janelas
-     └── avisos
-    Utils
+    Conexao
+     └── Conexoes.py
+    .txt
      └── registrar_erros.py
+     └── Relatorio_Mensal
+     └── Relatoria_Ocupacao
+     └── Reservas
