@@ -1,7 +1,6 @@
 import numpy as np # Importa biblioteca numpy
 import customtkinter as ctk # Importa biblioteca grafica
 import datetime # Importa biblioteca de formato de datas
-import os # Importa biblioteca de sistema operacional
 
 # --------------------------------------------------------------
 

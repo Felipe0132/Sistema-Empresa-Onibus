@@ -2,7 +2,6 @@ import datetime
 from Linhas.Linha import Linha
 import customtkinter as ctk
 from Onibus.Onibus import Onibus
-import os
 
 def janela_aviso(mensagem, cor): # Recebe um texto e a cor do texto
     # Criar janela para avisar situação apos uma ação
