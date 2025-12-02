@@ -5,6 +5,8 @@ import datetime # Importando biblioteca do formato de horas
 import customtkinter as ctk # Importando biblioteca de interface grafica
 import tkinter as tk # Importando biblioteca de interface grafica antiga
 
+# Codigo para rodar -> python3 -m Main.main001
+
 linhas = dict() # Criando o dicionario que contem key -> Obj linha e value -> lista de Obj onibus
 
 datetime_user = datetime.datetime.now() # Define os dados do usuario
