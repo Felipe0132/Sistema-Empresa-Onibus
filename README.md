@@ -135,11 +135,10 @@ Mini-janelas exibem as linhas cadastradas para facilitar a navegação.
     Conexao
      └── Conexoes.py
     .txt
-
-## Colaboradores:
-   * Felipe Côrtes do Nascimento
-   * Felipe Sílva 
      └── registrar_erros.py
      └── Relatorio_Mensal
      └── Relatoria_Ocupacao
      └── Reservas
+## Colaboradores:
+   * Felipe Côrtes do Nascimento
+   * Felipe Sílva 
