@@ -5,7 +5,7 @@ uma empresa de ônibus.\
 Ele permite cadastrar linhas, criar ônibus, registrar reservas, gerar
 relatórios e verificar informações de ocupação.\
 O sistema também automatiza processos: assim que uma linha é criada,
-30 ônibus são gerados dinamicamente a partir da data criada.
+30 ônibus são gerados automaticamente a partir da data criada.
 
 ##  Funcionalidades Principais
 
