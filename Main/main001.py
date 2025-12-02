@@ -72,7 +72,6 @@ def janela_adicionar_linha(): # Funcao para criar a janela responsavel para reco
     btn_voltar = ctk.CTkButton(janela_botoes, text="Voltar", command=janela_adicionar_linha.destroy, fg_color="#4682B4", text_color="white")
     btn_voltar.pack(side="left", padx=10) # Botao de voltar que destroi a atual
 
-
 def janela_adicionar_onibus(): # Funcao para criar a janela responsavel para recolher informacoes de adicionar linha
     janela_adicionar_onibus = ctk.CTkToplevel(janela) # Janela herda de uma janela principal maior
     janela_adicionar_onibus.title("Adicionando Onibus") # Titulo da janela
@@ -631,12 +630,12 @@ def janela_receber_txt():
     btn_voltar = ctk.CTkButton(janela_botoes, text="Voltar", command=janela_receber_txt.destroy, fg_color="#4682B4", text_color="white")
     btn_voltar.pack(side="left", padx=3)  # Botao que apaga a janela atual
 
-#----------------------------------------------------------------------------------__#
+
+#------------------------------------------------------------------------------------#
+
+# Menu principal
 
 
-
-
-# Menu de opcoes principal
 titulo = ctk.CTkLabel(janela_inicial, text="Sistema Rodoviario", font=("Arial Rounded MT Bold", 30), text_color="black", fg_color="transparent") # Titulo central
 titulo.pack(pady=(20, 20))
 
@@ -661,7 +660,4 @@ botao5.pack(pady=15)
 botao6 = ctk.CTkButton(janela, text="Receber .txt", command=janela_receber_txt, width=270, height=70, font=("Arial Rounded MT Bold", 19))
 botao6.pack(pady=15)
 
-
-
 janela.mainloop()
-

@@ -3,6 +3,9 @@ import customtkinter as ctk # Importa biblioteca grafica
 import datetime # Importa biblioteca de formato de datas
 import os # Importa biblioteca de sistema operacional
 
+# --------------------------------------------------------------
+
+# Extras
 
 def janela_aviso(mensagem, cor): # Funcao que recebe uma mensagem e cor para aparecer na tela
 
@@ -42,7 +45,9 @@ def registrar_erro(mensagem): # Funcao que registra erro em um arquivo .txt
         # FAILSAFE: evita que erro dentro da função quebre o sistema
         print("Falha ao registrar erro:", e)
 
+# -------------------------------------------------------------
 
+# Classe
 
 class Onibus(): # Criando classe Onibus
 
