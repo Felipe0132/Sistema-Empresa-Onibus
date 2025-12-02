@@ -5,7 +5,7 @@ uma empresa de ônibus.\
 Ele permite cadastrar linhas, criar ônibus, registrar reservas, gerar
 relatórios e verificar informações de ocupação.\
 O sistema também automatiza processos: assim que uma linha é criada,
-todos os ônibus necessários são gerados dinamicamente.
+30 ônibus são gerados dinamicamente a partir da data criada.
 
 ##  Funcionalidades Principais
 
@@ -13,25 +13,25 @@ todos os ônibus necessários são gerados dinamicamente.
 
 O funcionário informa:
 
--   Cidade de origem\
--   Cidade de destino\
--   Horário da linha\
+-   Cidade de origem
+-   Cidade de destino
+-   Horário da linha
 -   Valor da passagem
 
 Após criar a linha:
 
 -   São automaticamente gerados **30 ônibus** (um para cada dia do mês)
 -   Cada ônibus possui **20 lugares**
--   **Números ímpares** → assentos na **janela**
--   **Números pares** → assentos no **corredor**
+-   **Números ímpares** -> assentos na **janela**
+-   **Números pares** -> assentos no **corredor**
 
 ##  Gerenciamento de Ônibus
 
 O funcionário pode:
 
--   Adicionar ônibus extra informando data e linha\
--   Remover ônibus\
--   Alterar horário\
+-   Adicionar ônibus extra informando data e linha
+-   Remover ônibus
+-   Alterar horário
 -   Editar rota (origem e destino)
 
 Tudo realizado pela interface gráfica com janelas informativas.
@@ -42,22 +42,22 @@ Tudo realizado pela interface gráfica com janelas informativas.
 
 O funcionário seleciona:
 
--   Linha\
--   Data de saída\
+-   Linha
+-   Data de saída
 -   Assento desejado
 
 O sistema exibe mensagens indicando:
 
--    Assento reservado\
--    Assento ocupado\
--    Ônibus cheio\
--    Ônibus já partiu\
+-    Assento reservado
+-    Assento ocupado
+-    Ônibus cheio
+-    Ônibus já partiu
 -    Entrada inválida
 
 ### Via Arquivo `.txt`
 
--   O funcionário informa um arquivo contendo várias reservas\
--   O sistema processa todas automaticamente
+-   O funcionário informa um arquivo contendo várias reservas ou uma
+-   O sistema processa todas automaticamente (sendo necessário apenas colocar o endereço do .txt)
 
 ##  Registro de Erros
 
@@ -72,16 +72,16 @@ Toda reserva não concluída é registrada em um arquivo `.txt` contendo:
 
 O sistema:
 
--   Verifica todas as passagens vendidas no mês\
--   Calcula o valor total com base no preço da linha\
+-   Verifica todas as passagens vendidas no mês
+-   Calcula o valor total com base no preço da linha
 -   Gera um arquivo `.txt` ou exibe na interface
 
 ### Percentual de Ocupação por Dia da Semana
 
 O sistema calcula:
 
--   A ocupação média (%)\
--   Dividida por dia da semana\
+-   A ocupação média (%)
+-   Por dia da semana durante toda linha 
 -   Exibida como matriz ou gerada em `.txt`
 
 ##  Como Executar o Programa
@@ -91,22 +91,16 @@ O sistema calcula:
 É necessário ter instalado:
 
 -   Python 3\
--   `datetime`\
--   `numpy`\
--   `tkinter`\
--   `customtkinter`\
+-   `datetime`
+-   `numpy`
+-   `tkinter`
+-   `customtkinter`
 -   `os`
-
-Para instalar o **customtkinter**:
-
-``` bash
-pip install customtkinter
-```
 
 ### Execução
 
-1.  Baixe o repositório\
-2.  Abra o terminal e navegue até a pasta do projeto\
+1.  Baixe o repositório
+2.  Abra o terminal e navegue até a pasta do projeto
 3.  Execute:
 
 ``` bash
@@ -119,31 +113,28 @@ A interface principal será aberta automaticamente.
 
 A interface permite:
 
--   Adicionar linha\
--   Adicionar ônibus extra\
--   Comprar passagem\
--   Editar rota\
--   Editar horário\
--   Remover ônibus\
--   Gerar relatórios\
+-   Adicionar linha
+-   Adicionar ônibus extra
+-   Comprar passagem
+-   Editar rota
+-   Editar horário
+-   Remover ônibus
+-   Gerar relatórios
 -   Processar arquivos de reservas `.txt`
 
 Mini-janelas exibem as linhas cadastradas para facilitar a navegação.
 
 ##  Estrutura do Código (Resumo)
 
-    Main/
+    Main
      └── main001.py
-    Linhas/
+    Linhas
      └── Linha.py
-    Onibus/
+    Onibus
      └── Onibus.py
-    Interface/
+    Interface
      ├── telas.py
-     ├── janelas/
-     └── avisos/
-    Relatorios/
-     ├── faturamento.py
-     └── ocupacao.py
-    Utils/
+     ├── janelas
+     └── avisos
+    Utils
      └── registrar_erros.py
