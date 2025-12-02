@@ -7,9 +7,9 @@ relatórios e verificar informações de ocupação.\
 O sistema também automatiza processos: assim que uma linha é criada,
 todos os ônibus necessários são gerados dinamicamente.
 
-## 🚀 Funcionalidades Principais
+##  Funcionalidades Principais
 
-## 🚌 Criação de Linhas
+##  Criação de Linhas
 
 O funcionário informa:
 
@@ -25,7 +25,7 @@ Após criar a linha:
 -   **Números ímpares** → assentos na **janela**
 -   **Números pares** → assentos no **corredor**
 
-## 🛠 Gerenciamento de Ônibus
+##  Gerenciamento de Ônibus
 
 O funcionário pode:
 
@@ -36,7 +36,7 @@ O funcionário pode:
 
 Tudo realizado pela interface gráfica com janelas informativas.
 
-## 🎟 Reserva de Assentos
+##  Reserva de Assentos
 
 ### Pela Interface
 
@@ -48,25 +48,25 @@ O funcionário seleciona:
 
 O sistema exibe mensagens indicando:
 
--   ✔ Assento reservado\
--   ❌ Assento ocupado\
--   🚌 Ônibus cheio\
--   ⏳ Ônibus já partiu\
--   ⚠ Entrada inválida
+-    Assento reservado\
+-    Assento ocupado\
+-    Ônibus cheio\
+-    Ônibus já partiu\
+-    Entrada inválida
 
 ### Via Arquivo `.txt`
 
 -   O funcionário informa um arquivo contendo várias reservas\
 -   O sistema processa todas automaticamente
 
-## 📝 Registro de Erros
+##  Registro de Erros
 
 Toda reserva não concluída é registrada em um arquivo `.txt` contendo:
 
 -   Data e horário\
 -   Motivo do erro
 
-## 📊 Relatórios
+##  Relatórios
 
 ### Faturamento Mensal de uma Linha
 
@@ -84,7 +84,7 @@ O sistema calcula:
 -   Dividida por dia da semana\
 -   Exibida como matriz ou gerada em `.txt`
 
-## ▶️ Como Executar o Programa
+##  Como Executar o Programa
 
 ### Pré-requisitos
 
@@ -115,7 +115,7 @@ python3 -m Main.main001
 
 A interface principal será aberta automaticamente.
 
-## 🖥 Interface (GUI)
+##  Interface (GUI)
 
 A interface permite:
 
@@ -130,7 +130,7 @@ A interface permite:
 
 Mini-janelas exibem as linhas cadastradas para facilitar a navegação.
 
-## 📁 Estrutura do Código (Resumo)
+##  Estrutura do Código (Resumo)
 
     Main/
      └── main001.py
