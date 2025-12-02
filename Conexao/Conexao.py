@@ -76,6 +76,11 @@ def remover_linha(dict_linhas, linha): # Remove uma linha existente
 
 def adicionar_linha(dict_linhas, linha): # Função de adicionar linha
     try:
+
+        if linha.valor <= 0:
+            janela_aviso("Valor precisa ser maior que 0!", "red")
+            return
+
         for linha_existente in dict_linhas.keys(): # Percorre todas as linhas existentes
             if linha.cidade_origem == linha_existente.cidade_origem and linha.cidade_destino == linha_existente.cidade_destino and linha.horario_saida == linha_existente.horario_saida:
                 # Se achar uma linha identida a adicionada, ele entra no if
@@ -219,6 +224,8 @@ def calcular_vendas_do_mes(dict_linhas, linha_desejada, mes):
 
             janela_aviso(f"Valor arrecadado no mes pela linha:\n{total}", "green")
             return total
+    janela_aviso("Linha nao encontrada!", "red")
+    return
 
 def salvar_relatorio_vendas_txt(dict_linhas, linha_desejada, mes):
     caminho="txts/Relatorio_Mensal.txt"
