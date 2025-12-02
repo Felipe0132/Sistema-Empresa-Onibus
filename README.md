@@ -95,7 +95,6 @@ O sistema calcula:
 -   `numpy`
 -   `tkinter`
 -   `customtkinter`
--   `os`
 
 ### Execução
 
