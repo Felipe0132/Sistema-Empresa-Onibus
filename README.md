@@ -63,7 +63,7 @@ O sistema exibe mensagens indicando:
 
 Toda reserva não concluída é registrada em um arquivo `.txt` contendo:
 
--   Data e horário\
+-   Data e horário
 -   Motivo do erro
 
 ##  Relatórios
