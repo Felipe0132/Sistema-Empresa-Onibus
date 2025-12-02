@@ -82,7 +82,7 @@ O sistema calcula:
 
 -   A ocupação média (%)
 -   Por dia da semana durante toda linha 
--   Exibida como matriz ou gerada em `.txt`
+-   Exibida como matriz na interface ou em `.txt`
 
 ##  Como Executar o Programa
 
