@@ -1,122 +1,105 @@
 Sistema de Empresa de Ônibus (Python)
 
-Esse projeto simula o sistema interno de uma empresa de ônibus.
-Ele não é usado por passageiros, e sim pelos funcionários da empresa, permitindo cadastrar linhas, criar ônibus, registrar reservas, gerar relatórios e verificar informações de ocupação.
-
-O foco do programa é praticidade e automação: assim que uma linha é criada, todos os ônibus necessários são gerados dinamicamente, e todo o fluxo da empresa pode ser controlado pela interface gráfica.
+Este projeto simula o sistema interno utilizado pelos funcionários de uma empresa de ônibus.
+Ele permite cadastrar linhas, criar ônibus, registrar reservas, gerar relatórios e verificar informações de ocupação.
+O sistema foca em automação: assim que uma linha é criada, todos os ônibus necessários são gerados dinamicamente.
 
 Funcionalidades Principais
- Criação de linhas
+Criação de Linhas
 
 O funcionário informa:
 
-cidade de origem
+Cidade de origem
 
-cidade de destino
+Cidade de destino
 
-horário da linha
+Horário da linha
 
-valor da passagem
+Valor da passagem
 
-Assim que a linha é criada:
+Após criar a linha:
 
-são automaticamente gerados 30 ônibus, um para cada dia do mês
+São automaticamente gerados 30 ônibus (um para cada dia do mês)
 
-cada ônibus sempre tem 20 lugares
+Cada ônibus possui 20 lugares
 
-números ímpares → lugares na janela
+Números ímpares → lugares na janela
 
-números pares → lugares no corredor
+Números pares → lugares no corredor
 
- Gerenciamento de Ônibus
+Gerenciamento de Ônibus
 
 O funcionário pode:
 
-adicionar manualmente um ônibus extra informando data de saída e a linha
+Adicionar ônibus extra informando data e linha
 
-remover ônibus de uma linha
+Remover ônibus
 
-alterar horário da linha
+Alterar horário
 
-editar rota (origem e destino)
+Editar rota (origem e destino)
 
-Todos esses processos são feitos pela interface gráfica com janelas informativas.
+Tudo realizado pela interface gráfica com janelas informativas.
 
- Reserva de Assentos
+Reserva de Assentos
+Pela Interface
 
-A reserva de passagem pode ser feita de duas maneiras:
+O funcionário seleciona:
 
-1) Pela interface
+Linha
 
-O funcionário escolhe:
+Data de saída
 
-a linha
+Assento desejado
 
-a data de saída
+O sistema exibe mensagens automáticas indicando:
 
-o assento desejado
-E o programa mostra mensagens automáticas indicando:
+Assento reservado
 
-assento reservado
+Assento ocupado
 
-assento ocupado
+Ônibus cheio
 
-ônibus cheio
+Ônibus já partiu
 
-ônibus já partiu
+Entrada inválida
 
-entrada inválida
+Via Arquivo .txt
 
-2) Via arquivo .txt
+O funcionário informa o arquivo contendo várias reservas
 
-O funcionário pode informar o endereço de um arquivo contendo várias reservas, e o sistema processa todas automaticamente.
+O sistema processa todas automaticamente
 
- Registro de erros
+Registro de Erros
 
-Toda tentativa de reserva não concluída é registrada em um arquivo .txt, contendo:
+Toda tentativa de reserva não concluída é registrada em um arquivo .txt contendo:
 
-data e horário
+Data e horário
 
-motivo do erro (ônibus cheio, assento ocupado, ônibus já partiu, etc.)
-Isso garante rastreabilidade e permite auditoria.
+Motivo do erro
 
- Relatórios Gerados
+Relatórios
+Faturamento Mensal de uma Linha
 
-O sistema contém duas funções principais de relatório:
+O sistema:
 
-1) Faturamento mensal de uma linha
+Verifica todas as passagens vendidas no mês
 
-O programa:
+Calcula o valor total com base no preço da linha
 
-verifica todas as passagens vendidas ao longo do mês
+Gera um arquivo .txt ou exibe na interface
 
-soma o valor total com base no preço da linha
+Percentual de Ocupação por Dia da Semana
 
-gera um arquivo .txt com o resultado ou mostra na interface
+Para uma linha específica, o sistema calcula:
 
-2) Percentual de ocupação por dia da semana
+A ocupação média (%)
 
-O sistema calcula, para uma linha específica:
+Dividida por dia da semana
 
-a ocupação média (%)
+Apresentada como matriz ou gerada em .txt
 
-dividida pelos dias da semana
-
-considerando todos os ônibus do mês
-
-O relatório pode ser exibido:
-
-diretamente na interface
-
-ou gerado em um arquivo .txt
-
-Esse relatório é apresentado como uma matriz onde:
-
-colunas = dias da semana
-
-valores = ocupação média (%) de cada dia
-
- Como executar o programa
+Como Executar o Programa
 Pré-requisitos
 
 É necessário ter instalado:
@@ -133,113 +116,58 @@ customtkinter
 
 os
 
-(Normalmente todas já vêm no Python, exceto customtkinter.)
+Para instalar o customtkinter:
 
-Passo a passo
+pip install customtkinter
 
-Baixe o repositório Sistema-Empresa-Onibus
+Execução
+
+Baixe o repositório
 
 Abra o terminal e navegue até a pasta do projeto
 
-Execute o comando:
+Execute:
 
 python3 -m Main.main001
 
 
 A interface principal será aberta automaticamente.
 
- Interface (GUI)
+Interface (GUI)
 
-Ao executar o programa, uma janela aparece com diversas opções:
+A interface permite:
 
- Adicionar Linha
+Adicionar linha
 
-Digite cidade de origem
+Adicionar ônibus extra
 
-Digite cidade de destino
+Comprar passagem
 
-Digite horário (com instrução do formato)
-
-Digite valor em R$
-
-Após criar, os 30 ônibus do mês são gerados automaticamente.
-
- Adicionar Ônibus
-
-Digite a data de saída
-
-Digite a linha na qual deseja adicionar o ônibus
-
- Comprar Passagem
-
-Digite a data de saída
-
-Digite a linha desejada
-
-Interface exibe os assentos disponíveis
-
-Mensagens automáticas orientam o funcionário
-
-Também é possível reservar por arquivo .txt.
-
- Editar Linhas
 Editar rota
-
-selecionar linha
-
-informar nova origem e destino
 
 Editar horário
 
-selecionar linha
-
-informar novo horário
-
 Remover ônibus
 
-selecionar linha
+Gerar relatórios
 
-informar a data do ônibus que deseja remover
+Processar arquivos de reservas (.txt)
 
-Todas essas opções possuem mini-janelas de apoio mostrando as linhas cadastradas.
+Mini-janelas exibem as linhas cadastradas para facilitar a navegação.
 
- Relatórios
-Venda do mês
-
-selecionar linha
-
-selecionar mês
-
-gera arquivo .txt com total do faturamento
-
-Percentual médio por dia da semana
-
-selecionar linha
-
-escolher se deseja ver pela interface ou gerar .txt
-
-Receber arquivo .txt
-
-carregar arquivo de reservas em massa
-
-sistema processa todas
-
-erros são registrados automaticamente
-
-Estrutura do Código (resumo)
-
-Você pode incluir se quiser, mas deixo uma versão curta:
-
+Estrutura do Código (Resumo)
 Main/
-  main001.py
+ └── main001.py
 Linhas/
-  Linha.py
+ └── Linha.py
 Onibus/
-  Onibus.py
+ └── Onibus.py
 Interface/
-  telas.py, janelas, avisos
+ ├── telas.py
+ ├── janelas/
+ └── avisos/
 Relatorios/
-  faturamento.py
-  ocupacao.py
+ ├── faturamento.py
+ └── ocupacao.py
 Utils/
-  registrar_erros.py
+ └── registrar_erros.py
