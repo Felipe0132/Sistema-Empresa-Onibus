@@ -441,6 +441,45 @@ def janela_remover_onibus():
     btn_voltar = ctk.CTkButton(janela_botoes, text="Voltar", command=janela_remover_onibus.destroy, fg_color="#4682B4", text_color="white")
     btn_voltar.pack(side="left", padx=3) # Botao que destroi a janela atual
 
+def janela_remover_linha():
+    janela_remover_linha = ctk.CTkToplevel(janela) # Janela herda da janela principal
+    janela_remover_linha.title("Remover Linha") # Titulo da janela
+    janela_remover_linha.geometry("500x600") # Tamanho
+    janela_remover_linha.configure(fg_color='white') # Cor de fundo
+
+    titulo = ctk.CTkLabel(janela_remover_linha, text="Linha", text_color='black', font=('Arial', 25))
+    titulo.pack(pady=5)
+
+    linha_original = ctk.CTkEntry(janela_remover_linha, placeholder_text="Digite a linha que deseja remover...", width=320, height=50)
+    linha_original.pack(pady=2)
+
+    linhas_disponiveis = Conexao.retornar_linhas(linhas) # Aqui cria uma lista de linhas para puder imprimir os dados melhor
+
+    scrolllist = ctk.CTkScrollableFrame(janela_remover_linha, orientation=ctk.VERTICAL, width=320) # Cria uma parte de scroll na janela
+    scrolllist.pack(pady=5)
+
+    for linha_disp in linhas_disponiveis:
+        ctk.CTkLabel(scrolllist, text=linha_disp).pack(pady=2) # Aqui ele coloca na caixa de scroll os itens da lista
+
+
+    def editar():
+        try:
+            Conexao.remover_linha(linhas, str(linha_original.get())) # Chama a funcao principal
+        except ValueError: # Erro de tipo
+            Conexao.janela_aviso("Dados Invalidos!", "red")
+        except Exception as e: # Erro inesperado
+            Conexao.janela_aviso(f"Error: {e}", "red")
+
+    # Cria o campo dos botões abaixo, para não conflitar com o espaço
+    janela_botoes = ctk.CTkFrame(janela_remover_linha, fg_color="white")
+    janela_botoes.pack(pady=3)
+
+    btn_editar = ctk.CTkButton(janela_botoes,text="Editar", command= editar)
+    btn_editar.pack(side="left", padx=3)   # Botao que ao clicar chama a funcao editar    
+
+    btn_voltar = ctk.CTkButton(janela_botoes, text="Voltar", command=janela_remover_linha.destroy, fg_color="#4682B4", text_color="white")
+    btn_voltar.pack(side="left", padx=3)  # Botao que destroi janela atual
+
 def janela_editar_linhas():
     janela_editar_linhas = ctk.CTkToplevel(janela) # Janela herda da janela principal
     janela_editar_linhas.title("Opcoes de Edicao") # titulo da janela
@@ -458,6 +497,9 @@ def janela_editar_linhas():
 
     remover_onibus = ctk.CTkButton(janela_editar_linhas, text="Remover Onibus", command=janela_remover_onibus, width=270, height=70, font=("Arial Rounded MT Bold", 19))
     remover_onibus.pack(pady=15) # Botao que ao ser clicado, chama a janela de remover onibus
+
+    remover_linha = ctk.CTkButton(janela_editar_linhas, text="Remover Linha", command=janela_remover_linha, width=270, height=70, font=("Arial Rounded MT Bold", 19))
+    remover_linha.pack(pady=15) # Botao que ao ser clicado, chama a janela de remover Linha
 
     # Cria o campo dos botões abaixo, para não conflitar com o espaço
     janela_botoes = ctk.CTkFrame(janela_editar_linhas, fg_color="white")

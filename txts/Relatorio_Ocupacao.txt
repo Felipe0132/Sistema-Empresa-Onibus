@@ -1,0 +1,3 @@
+Relatorio linha: DIV para BH as 13:00 em 05/12/2025 09:30:09:
+['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+[0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0]

@@ -65,14 +65,14 @@ def adicionar_onibus(dict_linhas, linha_desejada, onibus): # Funcao que adiciona
 def remover_linha(dict_linhas, linha): # Remove uma linha existente
     try:
         for linha_existente in dict_linhas.keys(): # Percorre todas as linhas do dicionario
-            if linha.nome == linha_existente.nome:  # Se encontrar uma linha igual a desejada
+            if linha == linha_existente.nome:  # Se encontrar uma linha igual a desejada
                 del dict_linhas[linha_existente] # Remove a linha
                 janela_aviso("Linha removida", "red")
 
         janela_aviso("Linha nao existente!", "red") # Se percorrer e nao achar a linha
         
     except Exception as e: # Se achar erro
-        janela_aviso(f"Error: {e}")
+        janela_aviso(f"Error: {e}", "red")
 
 def adicionar_linha(dict_linhas, linha): # Função de adicionar linha
     try:
@@ -296,7 +296,7 @@ def matriz_percentual_ocupacao(dict_linhas, linha_desejada):
                             numero_onibus_dia += 1 # Adiciona quando haver onibus no dia
 
                     if numero_onibus_dia > 0:
-                        porcentagem = (total_ocupado / numero_onibus_dia) * 5 # Porcentagem é o total ocupado no dia analisado / o numero de onibus desse dia vezes 20
+                        porcentagem = (total_ocupado / numero_onibus_dia) / 20 * 100 # Porcentagem é o total ocupado no dia analisado / o numero de onibus desse dia vezes 20
                     else:
                         porcentagem = 0 # para nao ter divisao por 0
 
