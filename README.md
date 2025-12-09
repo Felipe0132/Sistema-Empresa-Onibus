@@ -33,6 +33,7 @@ O funcionário pode:
 -   Remover ônibus
 -   Alterar horário
 -   Editar rota (origem e destino)
+-   Remover linha
 
 Tudo realizado pela interface gráfica com janelas informativas.
 
@@ -118,6 +119,7 @@ A interface permite:
 -   Editar rota
 -   Editar horário
 -   Remover ônibus
+-   Remover linha
 -   Gerar relatórios
 -   Processar arquivos de reservas `.txt`
 
